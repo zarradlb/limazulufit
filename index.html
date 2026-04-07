@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Training · 30 Day Cut · Final</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ──────────────────────────────────── */
+:root{
+  /* Surface */
+  --bg:       #0d0d0f;
+  --s1:       #141416;
+  --s2:       #1a1a1d;
+  --s3:       #222226;
+  --s4:       #2a2a2f;
+  /* Border */
+  --b1: rgba(255,255,255,.06);
+  --b2: rgba(255,255,255,.10);
+  /* Text */
+  --t1: #f0f0f4;
+  --t2: #a8a8b8;
+  --t3: #606070;
+  /* Accent palette — Oura-inspired */
+  --emerald:  #1fd172;
+  --sapphire: #4d9eff;
+  --amber:    #f5a623;
+  --rose:     #e8547a;
+  --lavender: #a78bfa;
+  --ice:      #7ecfef;
+  /* Semantic */
+  --ok:    var(--emerald);
+  --mod:   var(--amber);
+  --sub:   var(--rose);
+  --str:   #f5d060;
+  --hinge: var(--lavender);
+  --iso:   var(--rose);
+  /* Spacing */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;display:flex;flex-direction:column;font-size:14px}
+
+/* ─── TYPOGRAPHY ─────────────────────────────── */
+.label-xs  {font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--t3)}
+.label-sm  {font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+.body-sm   {font-size:12px;font-weight:400;line-height:1.6;color:var(--t2)}
+.body-md   {font-size:13px;font-weight:400;line-height:1.6;color:var(--t2)}
+.mono      {font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--t3)}
+
+/* ─── HEADER ─────────────────────────────────── */
+.hdr{
+  background:rgba(13,13,15,.95);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--b1);
+  padding:16px 20px 14px; /* was 52px which hid content on non-notch */
+  flex-shrink:0;z-index:80;
+}
+.hdr-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hdr-title{font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.3px}
+.hdr-sub{font-size:11px;color:var(--t3);margin-top:2px;font-weight:400}
+.phase-chip{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  white-space:nowrap;flex-shrink:0;
+  border:1px solid transparent;
+}
+.pc-acc{background:rgba(77,158,255,.12);color:var(--sapphire);border-color:rgba(77,158,255,.2)}
+.pc-low{background:rgba(126,207,239,.12);color:var(--ice);border-color:rgba(126,207,239,.2)}
+.pc-int{background:rgba(245,166,35,.12);color:var(--amber);border-color:rgba(245,166,35,.2)}
+.pc-del{background:rgba(245,208,96,.12);color:var(--str);border-color:rgba(245,208,96,.2)}
+/* program arc */
+.prog-row{display:flex;align-items:center;gap:10px;margin-top:14px}
+.prog-arc-wrap{position:relative;width:32px;height:32px;flex-shrink:0}
+.prog-arc-wrap svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.prog-arc-bg{fill:none;stroke:var(--s4);stroke-width:3}
+.prog-arc-fill{fill:none;stroke:url(#arcGrad);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)}
+.prog-arc-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--t2)}
+.prog-info{flex:1}
+.prog-title{font-size:12px;font-weight:600;color:var(--t1)}
+.prog-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.prog-bar-track{height:2px;background:var(--s4);border-radius:2px;overflow:hidden;margin-top:5px}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--sapphire),var(--emerald));border-radius:2px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* ─── BOTTOM NAV ─────────────────────────────── */
+.bnav{
+  display:flex;
+  background:rgba(13,13,15,.96);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--b1);
+  padding:8px 0 22px;
+  flex-shrink:0;z-index:80;
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;padding:6px 4px;cursor:pointer;
+  border:none;background:none;color:var(--t3);
+  font-family:'Inter',sans-serif;font-size:9.5px;font-weight:500;
+  letter-spacing:.2px;transition:color .15s;
+  min-height:44px;
+}
+.bnav-item.on{color:var(--emerald)}
+.bnav-item.timer-nav{color:var(--emerald)}
+.bnav-item.timer-nav .bnav-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--emerald);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  transition:transform .15s, background .15s;
+}
+.bnav-item.timer-nav.active .bnav-icon{
+  background:rgba(31,209,114,.25);
+  box-shadow:0 0 0 2px var(--emerald);
+}
+.bnav-item.timer-nav span:last-child{color:var(--emerald)}
+.bnav-icon{font-size:20px;line-height:1;transition:transform .15s}
+.bnav-item.on .bnav-icon{transform:scale(1.1)}
+.bnav-item:active .bnav-icon{transform:scale(.92)}
+
+/* ─── MAIN LAYOUT ────────────────────────────── */
+.main{display:flex;flex:1;overflow:hidden;position:relative}
+
+/* ─── DAY RAIL (replaces sidebar) ───────────── */
+.rail{
+  width:62px;
+  background:var(--s1);
+  border-right:1px solid var(--b1);
+  overflow-y:auto;flex-shrink:0;
+  scrollbar-width:none;
+  padding:8px 0 20px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.rail::-webkit-scrollbar{display:none}
+.wk-label{
+  font-size:7.5px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--t3);
+  padding:6px 0 2px;width:100%;text-align:center;
+}
+/* day tile — 48px touch target */
+.dtile{
+  width:48px;height:48px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;border-radius:12px;gap:2px;
+  border:1.5px solid transparent;
+  transition:background .15s, border-color .15s;
+  position:relative;flex-shrink:0;
+}
+.dtile:active{transform:scale(.93)}
+.dtile.on{background:var(--s3);border-color:var(--b2)}
+.dtile-num{font-size:15px;font-weight:700;color:var(--t3);line-height:1;transition:color .15s}
+.dtile.on .dtile-num{color:var(--t1)}
+/* day type indicator dot */
+.dtile-dot{width:5px;height:5px;border-radius:50%;background:var(--t3);transition:background .15s}
+.dtile.acc .dtile-dot{background:var(--sapphire)}
+.dtile.low .dtile-dot{background:var(--ice)}
+.dtile.int .dtile-dot,.dtile.intensify .dtile-dot{background:var(--amber)}
+.dtile.rest-day .dtile-dot{background:var(--t3)}
+.dtile.done .dtile-dot{background:var(--emerald)}
+.dtile.done .dtile-num{color:var(--emerald)}
+/* done ring */
+.dtile.done::after{
+  content:'';position:absolute;inset:-1px;
+  border-radius:13px;
+  border:1.5px solid rgba(31,209,114,.3);
+  pointer-events:none;
+}
+
+/* ─── PANELS ─────────────────────────────────── */
+.panels{flex:1;overflow:hidden;position:relative}
+.panel{
+  position:absolute;inset:0;
+  overflow-y:auto;scrollbar-width:none;
+  padding:16px 16px 32px;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s;
+}
+.panel::-webkit-scrollbar{display:none}
+.panel.on{opacity:1;pointer-events:all}
+.dview{display:none}.dview.on{display:block}
+
+/* ─── SESSION HERO CARD ──────────────────────── */
+.session-hero{
+  background:var(--s2);
+  border:1px solid var(--b1);
+  border-radius:var(--r-xl);
+  padding:18px;
+  margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+/* Subtle gradient accent by day type */
+.session-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+}
+.sh-acc::before{background:linear-gradient(90deg,var(--sapphire),transparent)}
+.sh-low::before{background:linear-gradient(90deg,var(--ice),transparent)}
+.sh-int::before{background:linear-gradient(90deg,var(--amber),transparent)}
+.sh-del::before{background:linear-gradient(90deg,var(--str),transparent)}
+.sh-rest::before{background:linear-gradient(90deg,var(--t3),transparent)}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.hero-day{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--t3)}
+.hero-title{font-size:20px;font-weight:700;color:var(--t1);margin-top:3px;letter-spacing:-.3px;line-height:1.2}
+.hero-focus{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.4}
+/* Session progress ring */
+.sess-ring{position:relative;width:52px;height:52px;flex-shrink:0}
+.sess-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.sr-bg{fill:none;stroke:var(--s4);stroke-width:3.5}
+.sr-fill{fill:none;stroke:var(--emerald);stroke-width:3.5;stroke-linecap:round;transition:stroke-dashoffset .4s ease}
+.sr-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sr-pct{font-size:12px;font-weight:700;color:var(--t1);line-height:1}
+.sr-done{font-size:8px;color:var(--t3);margin-top:1px}
+/* RPE strip */
+.rpe-strip{
+  display:flex;align-items:center;gap:8px;
+  margin-top:14px;padding-top:12px;
+  border-top:1px solid var(--b1);
+}
+.rpe-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--t3)}
+.rpe-val{
+  font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+  letter-spacing:.3px;
+}
+.rpe-acc{background:rgba(77,158,255,.14);color:var(--sapphire)}
+.rpe-int{background:rgba(245,166,35,.14);color:var(--amber)}
+.rpe-del{background:rgba(245,208,96,.14);color:var(--str)}
+.rpe-low{background:rgba(126,207,239,.14);color:var(--ice)}
+.rpe-override{font-size:10px;color:var(--t3);flex:1;text-align:right}
+
+/* ─── BLOCK CARDS ────────────────────────────── */
+/* Shared block structure */
+.block{
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin-bottom:10px;
+  border:1px solid var(--b1);
+}
+.block-hd{
+  display:flex;align-items:center;
+  padding:13px 14px;
+  cursor:pointer;user-select:none;
+  gap:12px;min-height:52px; /* touch target */
+}
+.block-hd:active{opacity:.75}
+.block-icon{
+  width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.block-text{flex:1;min-width:0}
+.block-name{font-size:13px;font-weight:600;color:var(--t1);line-height:1.2}
+.block-note{font-size:11px;color:var(--t3);margin-top:2px;line-height:1.3}
+.block-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.block-prog{font-size:11px;font-weight:500;color:var(--t3);font-variant-numeric:tabular-nums}
+.block-chev{
+  width:20px;height:20px;border-radius:6px;
+  background:var(--s4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--t3);
+  transition:transform .2s, background .15s;
+  flex-shrink:0;
+}
+.block.col .block-chev{transform:rotate(-90deg)}
+.block.col .block-body{display:none}
+
+/* Tendon primer */
+.block-tendon{background:rgba(232,84,122,.06);border-color:rgba(232,84,122,.18)}
+.block-tendon .block-hd{background:rgba(232,84,122,.05)}
+.block-tendon .block-icon{background:rgba(232,84,122,.12)}
+.block-tendon .block-name{color:#f07090}
+.block-tendon .block-note{color:rgba(240,112,144,.5)}
+.block-tendon .block-chev{background:rgba(232,84,122,.12)}
+
+/* Anchor */
+.block-anchor{background:rgba(245,208,96,.04);border-color:rgba(245,208,96,.15)}
+.block-anchor .block-hd{background:rgba(245,208,96,.04)}
+.block-anchor .block-icon{background:rgba(245,208,96,.1)}
+.block-anchor .block-name{color:var(--str)}
+.block-anchor .block-note{color:rgba(245,208,96,.45)}
+.block-anchor .block-chev{background:rgba(245,208,96,.1)}
+
+/* Circuit */
+.block-circ{background:var(--s2)}
+.block-circ .block-hd{background:var(--s2)}
+.block-circ .block-icon{background:var(--s3)}
+.block-circ .block-name{color:var(--t1)}
+.block-circ .block-chev{background:var(--s3)}
+
+/* Left accent bar per block type */
+.block::before{
+  content:'';display:block;
+  height:100%;width:3px;
+  position:absolute;left:0;top:0;bottom:0;
+  border-radius:3px 0 0 3px;
+  pointer-events:none;
+}
+.block{position:relative}
+.block-tendon::before{background:var(--rose)}
+.block-anchor::before{background:var(--str)}
+.block-circ::before{background:transparent}
+
+/* Block sub-strip */
+.block-strip{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px 7px 18px;
+  background:var(--s1);
+  border-top:1px solid var(--b1);
+  font-size:10px;font-weight:500;color:var(--t3);
+}
+
+/* ─── EXERCISE ROWS ──────────────────────────── */
+.exrow{
+  display:flex;align-items:center;
+  padding:12px 14px 12px 18px;
+  border-top:1px solid var(--b1);
+  gap:11px;
+  cursor:pointer;
+  transition:background .1s;
+  min-height:52px; /* 44px+ touch target */
+  -webkit-user-select:none;user-select:none;
+}
+.exrow:active{background:rgba(255,255,255,.025)}
+/* Checkbox */
+.exchk{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--s4);
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  background:transparent;
+}
+.exrow.done .exchk{
+  background:var(--emerald);
+  border-color:var(--emerald);
+  transform:scale(1.1);
+}
+.exchk-inner{
+  width:8px;height:8px;
+  border-right:2px solid transparent;
+  border-bottom:2px solid transparent;
+  transform:rotate(45deg) translate(-1px,-1px);
+  transition:border-color .15s .05s;
+}
+.exrow.done .exchk-inner{border-color:#000}
+/* Content */
+.exinfo{flex:1;min-width:0}
+.exname{
+  font-size:13px;font-weight:500;color:var(--t1);
+  line-height:1.35;
+  transition:color .15s;
+}
+.exrow.done .exname{
+  color:var(--t3);
+  text-decoration:line-through;
+  text-decoration-color:var(--t3);
+}
+.exdet{
+  font-size:11px;color:var(--t2);
+  margin-top:3px;line-height:1.5;
+  font-variant-numeric:tabular-nums;
+}
+.exrow.done .exdet{color:var(--t3)}
+/* Badge */
+.tag{
+  font-size:9px;font-weight:700;letter-spacing:.6px;
+  padding:2px 7px;border-radius:5px;
+  text-transform:uppercase;flex-shrink:0;
+  border:1px solid transparent;
+}
+.tag-ok    {background:rgba(31,209,114,.1); color:var(--emerald); border-color:rgba(31,209,114,.2)}
+.tag-mod   {background:rgba(245,166,35,.1); color:var(--amber);   border-color:rgba(245,166,35,.2)}
+.tag-sub   {background:rgba(232,84,122,.1); color:var(--rose);    border-color:rgba(232,84,122,.2)}
+.tag-str   {background:rgba(245,208,96,.1); color:var(--str);     border-color:rgba(245,208,96,.2)}
+.tag-hinge {background:rgba(167,139,250,.1);color:var(--lavender);border-color:rgba(167,139,250,.2)}
+.tag-iso   {background:rgba(232,84,122,.1); color:#f07090;        border-color:rgba(232,84,122,.2)}
+
+/* ─── REST DAY ───────────────────────────────── */
+.rest-hero{
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:var(--r-xl);padding:24px 18px;
+  margin-bottom:12px;text-align:center;
+}
+.rest-orb{
+  width:64px;height:64px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,rgba(77,158,255,.3),rgba(77,158,255,.05));
+  border:1px solid rgba(77,158,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin:0 auto 12px;
+}
+.rest-title{font-size:18px;font-weight:700;color:var(--t1);letter-spacing:-.3px}
+.rest-body{font-size:12px;color:var(--t2);margin-top:10px;line-height:1.8;text-align:left}
+.rest-body strong{color:var(--t1);font-weight:600}
+.done-btn{
+  width:100%;padding:14px;
+  border-radius:var(--r-lg);
+  background:rgba(31,209,114,.1);
+  border:1px solid rgba(31,209,114,.2);
+  color:var(--emerald);
+  font-family:'Inter',sans-serif;
+  font-size:13px;font-weight:600;
+  cursor:pointer;margin-top:12px;
+  transition:background .15s;
+  min-height:48px;
+}
+.done-btn:active{background:rgba(31,209,114,.18)}
+
+/* ─── INFO ROWS (banners replaced) ──────────── */
+.info-row{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 14px;
+  border-radius:var(--r-sm);
+  margin-bottom:7px;
+  font-size:11.5px;line-height:1.55;color:var(--t2);
+}
+.ir-nutr {background:rgba(31,209,114,.06); border:1px solid rgba(31,209,114,.12)}
+.ir-inj  {background:rgba(245,166,35,.06); border:1px solid rgba(245,166,35,.12)}
+.ir-deload{background:rgba(245,208,96,.06);border:1px solid rgba(245,208,96,.12);color:rgba(245,208,96,.8)}
+.ir-low  {background:rgba(126,207,239,.06);border:1px solid rgba(126,207,239,.12);color:rgba(126,207,239,.8)}
+.info-row strong{color:var(--t1);font-weight:600}
+.info-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+/* Collapsible info rows */
+.info-row.collapsible{cursor:pointer}
+.info-row.collapsible.hidden{display:none}
+
+/* ─── COMPLETION CARD ────────────────────────── */
+.done-card{
+  display:none;
+  background:var(--s2);border:1px solid rgba(31,209,114,.2);
+  border-radius:var(--r-xl);padding:28px 18px;
+  text-align:center;margin-bottom:12px;
+}
+.done-card.show{display:block;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.done-ring-wrap{width:72px;height:72px;margin:0 auto 12px;position:relative}
+.done-ring-wrap svg{transform:rotate(-90deg)}
+.dr-bg{fill:none;stroke:var(--s4);stroke-width:4}
+.dr-fill{fill:none;stroke:var(--emerald);stroke-width:4;stroke-linecap:round;stroke-dasharray:201;stroke-dashoffset:201;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1) .1s}
+.done-card.show .dr-fill{stroke-dashoffset:0}
+.done-ring-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px}
+.done-title{font-size:20px;font-weight:700;color:var(--t1);letter-spacing:-.3px}
+.done-sub{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.6}
+
+/* ─── REFERENCE PANELS ───────────────────────── */
+.ref-section{margin-bottom:20px}
+.ref-section-title{
+  font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--t3);margin-bottom:8px;padding-left:2px;
+}
+.ref-card{
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:var(--r-lg);overflow:hidden;
+  margin-bottom:8px;
+}
+.ref-card-title{
+  font-size:12px;font-weight:700;color:var(--t1);
+  padding:12px 14px 10px;
+  border-bottom:1px solid var(--b1);
+  letter-spacing:-.1px;
+}
+.ref-row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:9px 14px;border-bottom:1px solid var(--b1);gap:8px;
+}
+.ref-row:last-child{border-bottom:none}
+.ref-lbl{font-size:12px;color:var(--t2)}
+.ref-val{font-size:11px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.rv-g{color:var(--emerald)}.rv-b{color:var(--sapphire)}.rv-a{color:var(--amber)}.rv-r{color:var(--rose)}.rv-y{color:var(--str)}.rv-i{color:var(--ice)}
+.ref-item{
+  display:flex;gap:10px;
+  padding:10px 14px;border-bottom:1px solid var(--b1);
+  font-size:12px;line-height:1.65;color:var(--t2);
+}
+.ref-item:last-child{border-bottom:none}
+.ref-item strong{color:var(--t1);font-weight:600}
+.ref-item-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+/* Table */
+.ref-table{width:100%;border-collapse:collapse;font-size:11px}
+.ref-table th{
+  background:var(--s1);color:var(--t3);font-weight:600;
+  padding:7px 10px;text-align:left;
+  border-bottom:1px solid var(--b1);
+  font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;
+}
+.ref-table td{padding:8px 10px;border-bottom:1px solid var(--b1);color:var(--t1);vertical-align:top}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.tc-b{color:var(--sapphire);font-weight:600}
+.tc-a{color:var(--amber);font-weight:600}
+.tc-y{color:var(--str);font-weight:600}
+.tc-r{color:var(--rose);font-weight:600}
+.tc-g{color:var(--emerald);font-weight:600}
+.tc-i{color:var(--ice);font-weight:600}
+
+/* ─── TIMER SHEET ────────────────────────────── */
+/* Persistent mini-bar — only visible during workout tab */
+.timer-bar{
+  position:fixed;bottom:calc(52px + 22px); /* above bnav */
+  left:0;right:0;z-index:70;
+  display:flex;align-items:center;gap:0;
+  background:var(--s1);
+  border-top:1px solid var(--b1);
+  border-bottom:1px solid var(--b1);
+  padding:6px 16px;
+  transform:translateY(100%);
+  transition:transform .25s cubic-bezier(.4,0,.2,1);
+}
+.timer-bar.visible{transform:translateY(0)}
+.timer-digit{
+  font-size:28px;font-weight:300;
+  letter-spacing:2px;color:var(--t1);
+  min-width:76px;font-variant-numeric:tabular-nums;
+  font-family:'Inter',sans-serif;
+  transition:color .2s;
+}
+.td-run{color:var(--emerald)}.td-warn{color:var(--amber)}
+.td-done{color:var(--rose);animation:flash .4s ease 4}
+@keyframes flash{0%,100%{opacity:1}50%{opacity:.2}}
+.timer-lbl{font-size:9.5px;color:var(--t3);margin-top:1px;letter-spacing:.3px}
+.timer-btns{display:flex;gap:6px;margin-left:auto}
+.tbtn{
+  height:34px;padding:0 16px;
+  border-radius:10px;border:none;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;min-width:34px;
+  transition:transform .1s;
+}
+.tbtn:active{transform:scale(.92)}
+.tbtn-go{background:var(--emerald);color:#000}
+.tbtn-pause{background:var(--amber);color:#000}
+.tbtn-reset{background:var(--s3);color:var(--t2);border:1px solid var(--b2)}
+/* Timer full panel (slide up from bnav) */
+.timer-panel{
+  position:fixed;bottom:0;left:0;right:0;z-index:75;
+  background:var(--s1);
+  border-top:1px solid var(--b1);
+  border-radius:20px 20px 0 0;
+  padding:16px 20px 110px;
+  transform:translateY(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.timer-panel.open{transform:translateY(0)}
+.tp-handle{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0 auto 14px}
+.tp-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tp-digit{font-size:52px;font-weight:200;letter-spacing:4px;color:var(--t1);font-variant-numeric:tabular-nums;line-height:1}
+.tp-meta{flex:1}
+.tp-lbl{font-size:12px;font-weight:600;color:var(--t2)}
+.tp-btns{display:flex;gap:8px;margin-left:auto}
+.tp-btn{height:40px;padding:0 20px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-width:40px}
+.tp-btn:active{transform:scale(.93)}
+.tp-go{background:var(--emerald);color:#000}
+.tp-pause{background:var(--amber);color:#000}
+.tp-reset{background:var(--s3);color:var(--t2);border:1px solid var(--b2)}
+.presets{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+.presets::-webkit-scrollbar{display:none}
+.preset{
+  flex-shrink:0;padding:8px 18px;
+  border-radius:20px;
+  background:#38383f;
+  border:none;
+  color:#e8e8f0;
+  font-size:12px;font-weight:700;
+  cursor:pointer;
+  transition:transform .1s, background .1s;
+  font-family:'Inter',sans-serif;
+  min-height:36px;
+  letter-spacing:.2px;
+  white-space:nowrap;
+}
+.preset.on{background:var(--emerald);color:#000;}
+.preset:active{transform:scale(.91)}
+/* FAB removed — timer lives in nav */
+/* ─── GLOSSARY ───────────────────────────────── */
+.gloss-item{
+  padding:10px 14px;
+  border-bottom:1px solid var(--b1);
+}
+.gloss-item:last-child{border-bottom:none}
+.gloss-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.gloss-term{
+  font-size:13px;font-weight:700;color:var(--emerald);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.gloss-full{font-size:11px;color:var(--t2);font-weight:500}
+.gloss-def{font-size:12px;color:var(--t2);line-height:1.65}
+</style>
+</head>
+<body>
+
+<!-- GRADIENT DEFS (arc fill) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4d9eff"/>
+      <stop offset="100%" stop-color="#1fd172"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <div class="hdr-title">30-Day Cut</div>
+      <div class="hdr-sub">RPE · Undulated · Tendon-Primed</div>
+    </div>
+    <div class="phase-chip pc-acc" id="phasePill">Week 1</div>
+  </div>
+  <div class="prog-row">
+    <div class="prog-arc-wrap">
+      <svg viewBox="0 0 32 32" width="32" height="32">
+        <circle class="prog-arc-bg" cx="16" cy="16" r="13"/>
+        <circle class="prog-arc-fill" cx="16" cy="16" r="13" id="progArc"
+          stroke-dasharray="81.68" stroke-dashoffset="81.68"/>
+      </svg>
+      <div class="prog-arc-label" id="progArcLbl">0</div>
+    </div>
+    <div class="prog-info">
+      <div class="prog-title" id="progTitle">Day 1 of 30</div>
+      <div class="prog-sub" id="progSub">Week 1 · Accumulation</div>
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="progBar" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- DAY RAIL -->
+  <div class="rail" id="rail"></div>
+  <!-- PANELS -->
+  <div class="panels">
+    <div class="panel on" id="panel-workout"><div id="dayContainer"></div></div>
+    <div class="panel" id="panel-rpe">
+      <div class="ref-section">
+        <div class="ref-section-title">Autoregulation System</div>
+        <div class="ref-card">
+          <div class="ref-card-title">Why RPE over fixed %</div>
+          <div class="ref-item"><span class="ref-item-icon">🎯</span><span><strong>Fixed % assumes linear recovery.</strong> It never is — especially with concurrent training, caloric deficit, and two active injury sites. RPE anchors load to actual daily readiness. (Israetel 2019, Zourdos et al. 2016)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">⚠️</span><span><strong>The override rule:</strong> If you hit the week's RPE ceiling before reaching the load target, stay at last week's load. Never chase a number that violates the cap.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">RPE Scale</div>
+          <table class="ref-table">
+            <tr><th>RPE</th><th>Feels Like</th><th>Reps In Tank</th><th>Used When</th></tr>
+            <tr><td class="tc-i">6</td><td>Comfortable</td><td>4+</td><td>Warm-up / recovery</td></tr>
+            <tr><td class="tc-b">7</td><td>Moderate effort</td><td>3</td><td>Week 1 anchors</td></tr>
+            <tr><td class="tc-y">8</td><td>Hard, form intact</td><td>2</td><td>Week 2 anchors</td></tr>
+            <tr><td class="tc-a">8.5</td><td>Very hard</td><td>1–2</td><td>Week 3 HARD CAP</td></tr>
+            <tr><td class="tc-a">9</td><td>Near maximal</td><td>1</td><td>Week 4 peak (3×4 only)</td></tr>
+            <tr><td class="tc-r">10</td><td>True max</td><td>0</td><td>Never in this program</td></tr>
+          </table>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Weekly RPE Caps — Anchor Sets</div>
+          <div class="ref-row"><div class="ref-lbl">Week 1 · Accumulation</div><div class="ref-val rv-b">RPE 7 · 3×5–6 · 3-0-3</div></div>
+          <div class="ref-row"><div class="ref-lbl">Week 2 · Accumulation</div><div class="ref-val rv-y">RPE 8 · 3×5–6 · 3-0-3</div></div>
+          <div class="ref-row"><div class="ref-lbl">Week 3 · Peak</div><div class="ref-val rv-a">RPE 8.5 HARD CAP · 4-0-2</div></div>
+          <div class="ref-row"><div class="ref-lbl">Week 4 · Deload Neural Peak</div><div class="ref-val rv-y">RPE 9 · 3×4 only</div></div>
+          <div class="ref-row"><div class="ref-lbl">Override Rule</div><div class="ref-val rv-r">Cap hit early → hold last week's load</div></div>
+        </div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Day Type Guide</div>
+        <div class="ref-card">
+          <div class="ref-card-title">⛵ Low-CNS Days (teal dot)</div>
+          <div class="ref-item"><span class="ref-item-icon">⛵</span><span><strong>No anchor sets. No failure. RPE ≤6.</strong> Purpose: blood flow, motor pattern reinforcement, tendon priming. These days exist to make your intensification days better.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">💗</span><span><strong>Tendon primer volume doubles</strong> on low-CNS days (5 sets vs 3). Isometrics at 70% MVC × 45s drive cortical pain inhibition. (Rio et al. 2015)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🚫</span><span><strong>Do not turn low days into intensity days.</strong> Athletes who violated low days gained 15% less strength over 12-week cycles than those who respected them. (Poliquin conjugate research)</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">🔥 Intensification Days (amber dot)</div>
+          <div class="ref-item"><span class="ref-item-icon">🔥</span><span><strong>Peak CNS output days.</strong> Anchor sets go to the week's RPE ceiling. Rest fully (3 min) between anchor sets. These sessions drive primary strength and hypertrophic adaptations.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📅</span><span><strong>Always placed after a rest or low-CNS day.</strong> Weekly pattern: Accumulation → Low-CNS → Rest → Intensification. This is within-week CNS undulation. (Verkhoshansky 1977, Zourdos 2016)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" id="panel-loads">
+      <div class="ref-section">
+        <div class="ref-section-title">Anchor Progression</div>
+        <div class="ref-card">
+          <div class="ref-card-title">Load Targets by Week</div>
+          <table class="ref-table">
+            <tr><th>Movement</th><th>Wk1 RPE7</th><th>Wk2 RPE8</th><th>Wk3 RPE8.5</th><th>Wk4 3×4</th></tr>
+            <tr><td>Barbell OHP</td><td>~70% 1RM</td><td class="tc-y">+5%</td><td class="tc-a">+10% CAP</td><td class="tc-y">Wk3+2.5%</td></tr>
+            <tr><td>Close-Grip Bench</td><td>~70% 1RM</td><td class="tc-y">+5%</td><td class="tc-a">+10% CAP</td><td class="tc-y">Wk3+2.5%</td></tr>
+            <tr><td>Barbell RDL</td><td>~70% 1RM</td><td class="tc-y">+5%</td><td class="tc-a">+10% CAP</td><td class="tc-y">Wk3+2.5%</td></tr>
+            <tr><td>Barbell Row</td><td>~70% 1RM</td><td class="tc-y">+5%</td><td class="tc-a">+10% CAP</td><td class="tc-y">Wk3+2.5%</td></tr>
+            <tr><td>Titan Hip Thrust</td><td>~70% 1RM</td><td class="tc-y">+7.5%</td><td class="tc-a">+12.5% CAP</td><td class="tc-y">Wk3+5%</td></tr>
+            <tr><td>Circuit DB</td><td>Comfortable 15RM</td><td class="tc-y">+5%</td><td class="tc-y">+5%</td><td>Same Wk3</td></tr>
+          </table>
+          <div style="padding:10px 14px;font-size:10.5px;color:var(--amber);border-top:1px solid var(--b1)">⚠ RPE cap hit before load target → hold previous week's load.</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Tendon Primer Protocol</div>
+          <div class="ref-item"><span class="ref-item-icon">💗</span><span><strong>5 sets × 45s holds at ~70% MVC.</strong> 2 min rest between. Pain acceptable up to 4/10 NRS — must decrease after set 2. If pain increases set-to-set, stop. (Rio et al. 2015)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📐</span><span><strong>Optimal angle — quad tendon: 60° knee flexion.</strong> Loads tensile component WITHOUT compressive force at superior patellar pole. Never at >90° flexion.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🔄</span><span><strong>Three movements rotated:</strong><br>A · Split squat hold 60° · 45s each leg<br>B · Wall sit 60–70° · 45s<br>C · Isometric calf raise midrange · 45s (pain-free only)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📅</span><span><strong>Rotation:</strong> D1–2: A+C · D4–5: B+C · D8–9: A+B · D11–12: all three. Low-CNS: 5 sets each. Training: 3 sets each.</span></div>
+        </div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Supplement Stack</div>
+        <div class="ref-card">
+          <div class="ref-card-title">🧱 Core Daily — Health &amp; Longevity</div>
+          <div class="ref-item"><span class="ref-item-icon">🐟</span><span><strong>Fish Oil (Omega-3s)</strong> · 2–4g EPA/DHA daily · Take with a fat-containing meal. Anti-inflammatory, joint lubrication, cardiovascular support. Reduces DOMS and systemic inflammation from high training load.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">☀️</span><span><strong>Vitamin D3</strong> · 2,000–5,000 IU daily with fat · Pair with K2 for calcium co-regulation. Supports testosterone production, bone density, immune function, and muscle force output. Deficiency directly impairs strength adaptation.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🪨</span><span><strong>Magnesium Glycinate</strong> · 300–400mg elemental daily · Split dose: morning for recovery, evening for sleep. Supports muscle relaxation, deep sleep (increases slow-wave), reduces nocturnal cramping, modulates cortisol.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">⚡</span><span><strong>CoQ10 / Ubiquinol</strong> · 100–200mg daily with fat · Ubiquinol form preferred (superior absorption). Mitochondrial ATP co-factor. Supports cardiac and skeletal muscle energy production. Reduces oxidative stress from high-volume training.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">💪 Performance &amp; Training</div>
+          <div class="ref-item"><span class="ref-item-icon">⏰</span><span><strong>Pre-session · 30–45 min before:</strong> 15g collagen peptides + 50mg Vitamin C. 3.5× collagen synthesis increase — non-negotiable for tendon remodeling. (Shaw et al. 2017)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🥤</span><span><strong>Post-session · within 30 min:</strong> 35–40g whey/casein + 5g creatine monohydrate. Creatine specifically counteracts lean mass loss during concurrent training. (Volek 2004)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🔵</span><span><strong>Creatine Monohydrate</strong> · 5g daily · Timing flexible. Increases phosphocreatine stores → greater training volume and strength output. Most evidence-backed supplement in existence.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">💧</span><span><strong>Electrolytes</strong> · Hard training days + sauna · Sodium, potassium, magnesium. Each sauna session depletes ~1–2g sodium. MMA sessions: weigh before/after, replace each 1kg lost with 1.5L fluid + electrolytes.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🩸</span><span><strong>Nitric Oxide Booster</strong> (optional) · 30–60 min pre-training · L-citrulline 6–8g preferred over L-arginine (superior absorption). Vasodilation → greater blood flow, pump, and endurance output.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">🦴 Joint, Tissue &amp; Injury Prevention</div>
+          <div class="ref-item"><span class="ref-item-icon">🦵</span><span><strong>Collagen Peptides</strong> · 15g · 30–45 min pre-training with Vit C. Provides glycine, proline, hydroxyproline for tendon collagen synthesis. Critical given active quad tendinopathy and retrocalcaneal bursitis.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🍊</span><span><strong>Vitamin C</strong> · 50mg alongside collagen · Co-factor for prolyl hydroxylase — required to form stable collagen triple-helix. Also supports immune function and reduces oxidative stress.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🌿</span><span><strong>Curcumin / Turmeric</strong> (optional but recommended) · 500–1,000mg with piperine (black pepper extract) · Must be taken with fat. Inhibits NF-κB inflammatory signaling. Piperine increases bioavailability ~95%. Phospholipid complex (Meriva) is an alternative.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">😴 Recovery, Stress &amp; Sleep</div>
+          <div class="ref-item"><span class="ref-item-icon">🌙</span><span><strong>Magnesium Glycinate · evening dose</strong> · 200–300mg before bed. Increases slow-wave sleep depth and reduces sleep onset time. Relaxes smooth and skeletal muscle. Doubles as cortisol modulator.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🌱</span><span><strong>Ashwagandha KSM-66</strong> (optional) · 300–600mg daily with food · Reduces cortisol by ~15–25% in chronically stressed individuals. Supports testosterone, reduces anxiety, improves sleep quality. Most effective when training load is high. (Chandrasekhar et al. 2012)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">💤</span><span><strong>Glycine</strong> (optional add) · 3g pre-sleep · Reduces core body temperature → shorter sleep onset, deeper slow-wave sleep. Also a collagen synthesis substrate. Can be combined with evening magnesium. (Bannai et al. 2012)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🥩</span><span><strong>Pre-sleep protein:</strong> 30–40g casein. Slow-digesting — releases amino acids over 5–7 hours. Maximizes overnight muscle protein synthesis and recovery window.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">🔥 Recovery Modalities</div>
+          <div class="ref-item"><span class="ref-item-icon">🔥</span><span><strong>Infrared sauna · 20–25 min.</strong> Heat shock proteins upregulate satellite cell activity. Use BEFORE cold plunge, or ≥4h post-training. Cold within 1h of resistance work blunts mTOR signaling.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🧊</span><span><strong>Cold plunge &lt;15°C · 10–15 min.</strong> Best on rest days. On training days wait ≥4h post-session. Reduces DOMS and inflammation. (Peake et al. 2017)</span></div>
+          <div class="ref-item"><span class="ref-item-icon">💪</span><span><strong>Iron Neck · 5 min</strong> on rest days. Cervical strength and proprioception — underappreciated for sport posture and injury prevention.</span></div>
+        </div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Macro Targets</div>
+        <div class="ref-card">
+          <div class="ref-card-title">Daily Targets</div>
+          <div class="ref-row"><div class="ref-lbl">Protein</div><div class="ref-val rv-g">≥2.2g / kg bodyweight · 35–40g doses every 3–4h</div></div>
+          <div class="ref-row"><div class="ref-lbl">Fats</div><div class="ref-val rv-b">≥0.8–1.0g / kg · floor for testosterone production</div></div>
+          <div class="ref-row"><div class="ref-lbl">Caloric deficit</div><div class="ref-val rv-a">300–500 kcal/day max · never cut protein to hit deficit</div></div>
+          <div class="ref-row"><div class="ref-lbl">Hydration</div><div class="ref-val rv-b">35–40ml / kg baseline · +500ml per sauna/MMA session</div></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Carb Timing</div>
+          <div class="ref-row"><div class="ref-lbl">Pre-training (60–90 min)</div><div class="ref-val rv-g">30–50g complex carbs + 20–30g protein</div></div>
+          <div class="ref-row"><div class="ref-lbl">Post-training (within 30 min)</div><div class="ref-val rv-g">40–60g fast carbs + 35–40g protein + 5g creatine</div></div>
+          <div class="ref-row"><div class="ref-lbl">Rest days</div><div class="ref-val rv-a">Reduce total carbs 20–30% vs training days</div></div>
+          <div class="ref-row"><div class="ref-lbl">Pre-sleep</div><div class="ref-val rv-b">30–40g casein · optional: 3g glycine</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" id="panel-science">
+      <div class="ref-section">
+        <div class="ref-section-title">Program Scorecard</div>
+        <div class="ref-card">
+          <div class="ref-row"><div class="ref-lbl">Metabolic stimulus (EPOC)</div><div class="ref-val rv-g">Preserved ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Muscle retention</div><div class="ref-val rv-g">Anchors @ RPE-capped 75–85% ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Strength progression</div><div class="ref-val rv-g">RPE-autoregulated with override ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Tendon rehab</div><div class="ref-val rv-g">Daily isometric primer · Rio ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">CNS undulation</div><div class="ref-val rv-g">Acc → Low → Int within week ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Tempo</div><div class="ref-val rv-g">3-0-3 Wk1–2 · 4-0-2 Wk3–4 ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Posterior chain</div><div class="ref-val rv-g">RDL + Titan · 9 of 22 days ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Periodization</div><div class="ref-val rv-g">Linear + deload Week 4 ✓</div></div>
+          <div class="ref-row"><div class="ref-lbl">Injury compatibility</div><div class="ref-val rv-g">All impact cardio substituted ✓</div></div>
+        </div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Evidence Base</div>
+        <div class="ref-card">
+          <div class="ref-item"><span class="ref-item-icon">🎯</span><span><strong>RPE autoregulation (Zourdos 2016, Israetel 2019):</strong> RPE-anchored loading outperforms fixed-% by 8–14% in strength outcomes over 12-week cycles. Override rule prevents overreaching on recovery-compromised days.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">💗</span><span><strong>Isometric tendon loading (Rio 2015, Bohm 2015):</strong> 70% MVC × 45s produces immediate cortical pain inhibition AND drives tenocyte mechanotransduction. Rio's RCT: 58% pain reduction at 4 weeks vs isotonic exercise.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📊</span><span><strong>CNS undulation (Verkhoshansky 1977, Poliquin 1988, Zourdos 2016):</strong> Varying intensity within the microcycle delays CNS habituation and produces 12–18% greater strength output on intensification days vs flat loading.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🏋️</span><span><strong>Concurrent training sequencing (Wilson 2012):</strong> Resistance before endurance minimizes AMPK-mTOR interference. Tendon primer → anchors → circuits → row finisher follows this exactly.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🍑</span><span><strong>Hip thrust (Contreras 2015):</strong> Highest glute EMG of any exercise. Glutes are the largest single muscle mass. Training them preserves the most metabolically expensive lean tissue during caloric restriction.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">🔽</span><span><strong>Deload / supercompensation (Issurin 2010, Zatsiorsky 1995):</strong> Planned deload allows adaptation above baseline. Terminating without deload means finishing at peak fatigue, not peak adaptation.</span></div>
+        </div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Glossary</div>
+        <div style="position:relative;margin-bottom:10px">
+          <input id="glossSearch" type="search" placeholder="Search terms and acronyms…"
+            oninput="filterGloss(this.value)"
+            style="width:100%;padding:11px 14px 11px 38px;border-radius:12px;
+                   background:#1a1a1d;border:1px solid rgba(255,255,255,.1);
+                   color:#e8e8f0;font-size:13px;font-family:'Inter',sans-serif;
+                   outline:none;-webkit-appearance:none;box-sizing:border-box;">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">🔍</span>
+        </div>
+        <div id="glossContainer"></div>
+      </div>
+      <div class="ref-section">
+        <div class="ref-section-title">Research References</div>
+        <div class="ref-card">
+          <div class="ref-card-title">Training Methodology</div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Boutcher (2011).</strong> High-intensity intermittent exercise and fat loss. <em>Journal of Obesity.</em> Demonstrates MRT and HIIT produce superior fat oxidation and EPOC vs steady-state cardio.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Tremblay, Simoneau &amp; Bouchard (1994).</strong> Impact of exercise intensity on body fatness and skeletal muscle metabolism. <em>Metabolism, 43(7), 814–818.</em> Landmark study showing interval training produces 9× greater fat loss than steady-state despite lower caloric expenditure.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Kraemer &amp; Ratamess (2004).</strong> Fundamentals of resistance training. <em>Medicine &amp; Science in Sports &amp; Exercise, 36(4), 674–688.</em> Foundational progressive overload principles — without systematic load increase, adaptations plateau at 2–3 weeks.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Zourdos et al. (2016).</strong> Novel resistance training-specific RPE scale measuring repetitions in reserve. <em>Journal of Strength &amp; Conditioning Research, 30(1), 267–275.</em> Validates the RIR-based RPE scale used in this program.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Israetel, Case &amp; Hoffman (2019).</strong> <em>Scientific Principles of Strength Training.</em> Renaissance Periodization. RPE autoregulation outperforms fixed-percentage loading by 8–14% in strength outcomes over 12-week cycles.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Schoenfeld &amp; Grgic (2019).</strong> Does training to failure maximize muscle hypertrophy? <em>Strength &amp; Conditioning Journal, 41(5), 108–113.</em> Drop sets produce comparable hypertrophic stimulus to traditional volume with less time investment.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Burd et al. (2012).</strong> Muscle time under tension during resistance exercise stimulates differential muscle protein sub-fractional synthetic responses. <em>Journal of Physiology, 590(2), 351–362.</em> Basis for 3-0-3 tempo prescription — TUT drives hypertrophic and metabolic stimulus.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Schoenfeld (2010).</strong> The mechanisms of muscle hypertrophy and their application to resistance training. <em>Journal of Strength &amp; Conditioning Research, 24(10), 2857–2872.</em> Comprehensive review of mechanical tension, metabolic stress, and muscle damage as hypertrophic drivers.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Morton et al. (2016).</strong> Neither load nor systemic hormones determine resistance training-mediated hypertrophy or strength gains in resistance-trained young men. <em>Journal of Applied Physiology, 121(1), 129–138.</em> Comparable hypertrophy across rep ranges when taken close to failure — basis for replacing 50-rep BW sets with loaded 15–20 rep sets.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Verkhoshansky &amp; Siff (1977 / 2009).</strong> <em>Supertraining.</em> 6th ed. Soviet conjugate periodization principles — varying intensity within the microcycle delays CNS habituation, producing 12–18% greater output on peak days.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Issurin (2010).</strong> New horizons for the methodology and physiology of training periodization. <em>Sports Medicine, 40(3), 189–206.</em> Block periodization and deload supercompensation — basis for Week 4 structure.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Zatsiorsky &amp; Kraemer (1995 / 2006).</strong> <em>Science and Practice of Strength Training.</em> Human Kinetics. Foundational Soviet periodization theory including supercompensation, Prilepin's table, and intensity zone management.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Wilson et al. (2012).</strong> Concurrent training: a meta-analysis examining interference of aerobic and strength exercises. <em>Journal of Strength &amp; Conditioning Research, 26(8), 2293–2307.</em> Resistance before endurance minimizes AMPK-mTOR interference — basis for session sequencing.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Anderson &amp; Behm (2005).</strong> Trunk muscle activity increases with unstable squat movements. <em>Canadian Journal of Applied Physiology, 30(1), 33–45.</em> Instability devices reduce peak force output 20–30% — context for body ball exercise use.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Tendon Rehabilitation</div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Rio et al. (2015).</strong> Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. <em>British Journal of Sports Medicine, 49(19), 1277–1283.</em> Isometrics at 70% MVC × 45s: 58% pain reduction at 4 weeks. Immediate cortical pain inhibition. Foundational basis for the tendon primer protocol.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Kongsgaard et al. (2009).</strong> Corticosteroid injections, eccentric decline squat training and heavy slow resistance training in patellar tendinopathy. <em>Scandinavian Journal of Medicine &amp; Science in Sports, 19(6), 790–802.</em> HSR protocol at ~85% 1RM with 3-0-3 tempo produces superior tendon remodeling vs eccentric-only. Basis for anchor set prescription.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Bohm et al. (2015).</strong> Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults. <em>Sports Medicine — Open, 1(1), 7.</em> Confirms mechanical loading drives tenocyte adaptation and collagen remodeling across exercise types.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Cook &amp; Purdam (2009).</strong> Is tendon pathology a continuum? A pathology model to explain the clinical presentation of load-induced tendinopathy. <em>British Journal of Sports Medicine, 43(6), 409–416.</em> The Cook-Purdam continuum model — reactive → dysrepair → degenerative. Framework for classifying severity and selecting intervention.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Roig et al. (2009).</strong> The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis. <em>British Journal of Sports Medicine, 43(8), 556–568.</em> Eccentric contractions produce superior strength and hypertrophic adaptations — basis for 3-second eccentric prescription.</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Nutrition &amp; Supplementation</div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Helms, Aragon &amp; Fitschen (2014).</strong> Evidence-based recommendations for natural bodybuilding contest preparation: nutrition and supplementation. <em>Journal of the International Society of Sports Nutrition, 11, 20.</em> ≥2.2g/kg protein required to prevent lean mass loss during concurrent training caloric deficit.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Shaw et al. (2017).</strong> Vitamin C–enriched gelatin supplementation before intermittent activity augments collagen synthesis. <em>American Journal of Clinical Nutrition, 105(1), 136–143.</em> 15g collagen + 50mg Vit C × 1h before loading produces 3.5× collagen synthesis increase. Basis for pre-session collagen protocol.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Volek et al. (2004).</strong> The effects of creatine supplementation on muscular performance and body composition responses to short-term resistance training overreaching. <em>European Journal of Applied Physiology, 91(5–6), 628–637.</em> Creatine specifically counteracts lean mass loss during combined resistance + endurance training.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Moore et al. (2009).</strong> Ingested protein dose response of muscle and albumin protein synthesis after resistance exercise in young men. <em>American Journal of Clinical Nutrition, 89(1), 161–168.</em> 20–40g protein post-exercise maximally stimulates MPS — basis for post-session protein dosing.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Areta et al. (2013).</strong> Timing and distribution of protein ingestion during prolonged recovery from resistance exercise alters myofibrillar protein synthesis. <em>Journal of Physiology, 591(9), 2319–2331.</em> Distributing protein in 20–40g doses every 3–4h maximizes 24-hour MPS — basis for protein distribution strategy.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Chandrasekhar et al. (2012).</strong> A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of Ashwagandha root. <em>Indian Journal of Psychological Medicine, 34(3), 255–262.</em> KSM-66 ashwagandha reduces cortisol by ~27.9% and improves perceived stress in chronically stressed adults.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Bannai &amp; Kawai (2012).</strong> New therapeutic strategy for amino acid medicine: glycine improves the quality of sleep. <em>Journal of Pharmacological Sciences, 118(2), 145–148.</em> 3g glycine pre-sleep reduces core body temperature and time to sleep onset, increases slow-wave sleep.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Contreras et al. (2015).</strong> A comparison of gluteus maximus, biceps femoris, and vastus lateralis EMG activity in the back squat and barbell hip thrust exercises. <em>Journal of Applied Biomechanics, 31(6), 452–458.</em> Hip thrust produces highest glute EMG of any exercise — basis for Titan hip thrust inclusion as anchor movement.</span></div>
+          <div class="ref-item"><span class="ref-item-icon">📄</span><span><strong>Peake et al. (2017).</strong> The effects of cold water immersion and active recovery on inflammation and cell stress responses in human skeletal muscle after resistance exercise. <em>Journal of Physiology, 595(3), 695–711.</em> Cold immersion reduces inflammation and DOMS but attenuates mTOR signaling if applied within 1h of resistance work.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMER PANEL (slides up from nav) -->
+<div class="timer-panel" id="timerPanel">
+  <div class="tp-handle"></div>
+  <div class="tp-row">
+    <div>
+      <div class="tp-digit" id="tDisp">00:45</div>
+      <div class="tp-lbl" id="tLbl">Isometric Hold</div>
+    </div>
+    <div class="tp-btns">
+      <button class="tp-btn tp-reset" onclick="tReset()">↺</button>
+      <button class="tp-btn tp-go" id="tBtn" onclick="tToggle()">Start</button>
+    </div>
+  </div>
+  <div class="presets">
+    <button class="preset on" onclick="tPreset(45,this,'Isometric Hold')">45s ISO</button>
+    <button class="preset" onclick="tPreset(30,this,'Rest')">30s</button>
+    <button class="preset" onclick="tPreset(45,this,'Rest')">45s</button>
+    <button class="preset" onclick="tPreset(120,this,'ISO Rest')">2 min</button>
+    <button class="preset" onclick="tPreset(150,this,'Anchor Rest')">2:30</button>
+    <button class="preset" onclick="tPreset(180,this,'Anchor Rest')">3 min</button>
+    <button class="preset" onclick="tPreset(900,this,'Cardio')">15 min</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bnav-item on" onclick="switchTab('workout',this)" id="nav-workout">
+    <span class="bnav-icon">🏋️</span><span>Workout</span>
+  </button>
+  <button class="bnav-item" onclick="switchTab('rpe',this)" id="nav-rpe">
+    <span class="bnav-icon">⚡</span><span>RPE</span>
+  </button>
+  <button class="bnav-item timer-nav" id="timerFAB" onclick="toggleTimerPanel()">
+    <span class="bnav-icon">⏱</span><span>Timer</span>
+  </button>
+  <button class="bnav-item" onclick="switchTab('loads',this)" id="nav-loads">
+    <span class="bnav-icon">📈</span><span>Loads</span>
+  </button>
+  <button class="bnav-item" onclick="switchTab('science',this)" id="nav-science">
+    <span class="bnav-icon">🔬</span><span>Science</span>
+  </button>
+</nav>
+
+<script>
+// ═══════════════════ DATA (identical content, unchanged) ═══════════════════
+const T=(n,note,ex)=>({type:'tendon',n,note,ex});
+const A=(n,note,ex)=>({type:'anchor',n,note,ex});
+const C=(n,note,ex)=>({type:'circ',n,note,ex});
+const E=(n,d,f)=>({n,d,f});
+const RPE={
+  1:'RPE 7 · 3×5–6 · 3-0-3 tempo · ~70% 1RM',
+  2:'RPE 8 · 3×5–6 · 3-0-3 tempo',
+  3:'RPE 8.5 HARD CAP · 4-0-2 tempo',
+  4:'RPE 9 allowed · 3×4 · neural peak'
+};
+const RPE_SHORT={1:'RPE 7',2:'RPE 8',3:'RPE 8.5 CAP',4:'RPE 9 · 3×4'};
+const RPE_CLS={1:'rpe-acc',2:'rpe-acc',3:'rpe-int',4:'rpe-del'};
+const PHASE_LABEL={1:'Week 1 · Accumulation',2:'Week 2 · Accumulation',3:'Week 3 · Peak',4:'Week 4 · Deload'};
+const PRIMER_A=[
+  E('Split Squat Isometric — LEFT','45s · 60° knee flexion · drive knee forward gently · pain ≤4/10 · 3 sets training / 5 sets low-CNS','iso'),
+  E('Split Squat Isometric — RIGHT','45s · same cues · 2 min rest after each hold','iso'),
+];
+const PRIMER_B=[E('Wall Sit Isometric','45s · 60–70° knee flexion · back flat · pain ≤4/10 · 3 sets training / 5 sets low-CNS','iso')];
+const PRIMER_C=[
+  E('Isometric Calf Raise Hold — LEFT','45s · midrange · heel raised · STOP if pain >2/10 (retrocalcaneal bursa)','iso'),
+  E('Isometric Calf Raise Hold — RIGHT','45s · same cues · 2 min rest','iso'),
+];
+const PRIMER_FULL=[...PRIMER_A,...PRIMER_B,...PRIMER_C];
+const REST30='30s rest · 2 rounds unless marked';
+const REST_ANC='2:30–3 min rest · RPE-capped';
+
+const DAYS=[
+{d:1,w:1,dayType:'acc',focus:'Push · Chest / Shoulder / Tricep',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest · before everything else',[...PRIMER_A,...PRIMER_C]),
+  A('STRENGTH ANCHORS',`${REST_ANC} · ${RPE[1]}`,[
+    E('Barbell Overhead Press (power cage)','3×5–6 · RPE 7 · 3-0-3 · record load','str'),
+    E('Close-Grip Bench Press (power cage)','3×5–6 · RPE 7 · 3-0-3 · record load','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('DB Chest Press on Bench','15 reps · 3-0-3','ok'),
+    E('DB Chest Fly on Body Ball','12 reps · 3-0-3 · stretch at bottom','ok'),
+    E('Goblet Squat (loaded)','15 reps · 3-0-3 · pain check at bottom','ok'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('C2 Row Sprint (orig: treadmill sprint)','60s · damper 5 · rate 28+ spm','sub'),
+    E('Close-Grip Push-ups','AMRAP · 3-0-1','ok'),
+    E('Plank','35s · brace deep · neutral spine','ok'),
+    E('Side Plank with Hip Abduction','10 reps each side · 2s lift','ok'),
+    E('TRX Fallout','10 reps · 3-0-3 · anterior core','ok'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Close-Grip Push-ups','AMRAP','ok'),
+    E('Plank to Push-up','10 reps · controlled','ok'),
+    E('Step-out Burpee','12 reps · no jump','mod'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+    E('C2 Row Sprint','60s · rate 30 spm','sub'),
+    E('Frog Push-ups','15 reps · monitor anterior knee','mod'),
+    E('Slow Squat Thrusts','15 reps · 3-0-3 · stop if knee >3/10','mod'),
+  ]),
+  C('Circuit 4',REST30,[
+    E('Band Tricep Pressdown','15 reps · 3-0-3','ok'),
+    E('Static Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+    E('Mountain Climbers','45s · 2s/rep · slow','mod'),
+    E('Boat Pose','35s hold','ok'),
+    E('Bench Dips','20 reps · 3-0-3','ok'),
+    E('Battle Ropes (orig: jump rope)','45s alternating waves','sub'),
+    E('Seated DB Shoulder + Leg Extension','10 reps each · pain check','mod'),
+  ]),
+  C('Cardio Finisher','C2 Rower',[
+    E('Steady-State C2 Row (orig: treadmill 15 min)','15 min · rate 20–22 spm · RPE 6–7 · Zone 2','sub'),
+  ]),
+]},
+{d:2,w:1,dayType:'low',focus:'Low-CNS · Pull / Hinge · Blood Flow',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · low-CNS day = full primer volume',[...PRIMER_A,...PRIMER_C]),
+  C('Low-CNS Circuit','All reps controlled · NO failure · RPE ≤6 · no anchor sets',[
+    E('Wide-Grip Lat Pull-down (light)','3×12 · 3-0-3 · RPE 5–6 · feel the lats · no grind','ok'),
+    E('TRX Row','3×12 · 3-0-3 · controlled','ok'),
+    E('Romanian Deadlift (light — technique)','3×8 · 60% 1RM · 4-0-2 · hip hinge drill · record baseline','hinge'),
+    E('Goblet Squat','2×15 · 3-0-3 · light','ok'),
+    E('Band Pull-Apart','3×15 · 2s squeeze','ok'),
+    E('Box Step-up (controlled)','2×10 each · 3-0-3 · slow descent','ok'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+  ]),
+  C('Finisher','Light · non-fatiguing',[
+    E('C2 Row — Easy','15 min · rate 18–20 spm · RPE 5 · Zone 1–2','sub'),
+  ]),
+]},
+{d:3,w:1,rest:true,note:`<strong>Rest Day Protocol</strong><br><br>• Foam roll: quads, IT band, hip flexors, thoracic spine<br>• Iron Neck: 5 min isometric cervical loading<br>• Infrared sauna 20 min → cold plunge 10 min<br>• <strong>Log NRS both injury sites on waking</strong><br>• Pre-sleep: CJC/Ipamorelin + 40g casein<br>• Tomorrow is INTENSIFICATION — rest fully today`},
+{d:4,w:1,dayType:'int',focus:'Intensification · Push · Upper / Core',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS — INTENSIFICATION',`${REST_ANC} · ${RPE[1]} · Push to RPE 7 ceiling`,[
+    E('Barbell OHP (power cage)','3×5–6 · RPE 7 ceiling · 3-0-3 · compare to Day 1','str'),
+    E('Close-Grip Bench Press','3×5–6 · RPE 7 · 3-0-3','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('DB Chest Press on Body Ball','15 reps · 3-0-3','ok'),
+    E('DB Chest Fly','12 reps · 3-0-3','ok'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('Pause Squat (orig: jump squat)','12 reps · 3s pause at bottom','sub'),
+    E('Decline DB Press','AMRAP · 3-0-3','ok'),
+    E('V-Grip Fly (bands)','10 each · 3-0-3','ok'),
+    E('Slow Squat Thrusts','12 reps · 3-0-3','mod'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Close-Grip Push-ups','AMRAP · 3-0-1','ok'),
+    E('Lateral Lunge','10 each · 3-0-3 · monitor quad','mod'),
+    E('Plank-ups','AMRAP · controlled','ok'),
+    E('Single-Leg Box Step-up','10 each · slow descent','mod'),
+  ]),
+  C('Circuit 4',REST30,[
+    E('DB Military Shoulder Press','12 each side · 3-0-3','ok'),
+    E('Lateral Band Walk (orig: rock star jumps)','20 steps each direction','sub'),
+    E('Single-Leg Hip Thrust on floor','15 each · 3-0-3','ok'),
+    E('Battle Ropes (orig: jumping jacks)','45s alternating waves','sub'),
+    E('Bicycle Crunches','25 reps · 2s/rep','ok'),
+    E('Hanging Knee Raise + Twist (cage bar)','12 each side','ok'),
+  ]),
+]},
+{d:5,w:1,dayType:'low',focus:'Low-CNS · Lower / Hinge · Posterior Chain',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · full primer',[...PRIMER_FULL]),
+  C('Low-CNS Circuit','RPE ≤6 · no failure · technique',[
+    E('Titan Glute Hip Thrust — technique','3×8 · light · 4-0-2 · establish form · record baseline','hinge'),
+    E('Romanian Deadlift (light)','3×8 · 60% 1RM · 4-0-2 · groove the pattern','hinge'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+    E('Goblet Squat','2×15 · 3-0-3 · light','ok'),
+    E('Band Glute Kickback','2×15 each · 2s hold','ok'),
+    E('Box Step-up (controlled)','2×10 each · slow · RPE 5','ok'),
+    E('Supermans','2×15 · 2s hold','ok'),
+    E('TRX Row','2×12 · 3-0-3','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 18–20 spm · Zone 1–2','sub')]),
+]},
+{d:6,w:1,rest:true,note:`<strong>Week 1 Recovery — Day 1 of 2</strong><br><br>• Foam roll: glutes, hip flexors, lats, calves<br>• Infrared sauna → cold plunge<br>• <strong>Week 2 prep:</strong> RPE cap moves to 8. Calculate +5% for all anchor loads now.<br>• Log NRS both sites<br>• Pre-sleep: CJC/Ipamorelin + casein`},
+{d:7,w:1,rest:true,note:`<strong>Week 1 Recovery — Day 2 of 2</strong><br><br>• Full rest or 15 min gentle C2 row rate 16–18<br>• Mobility: hip flexors, ankle dorsiflexion, thoracic rotation<br>• Confirm Week 2 loads are ready`},
+{d:8,w:2,dayType:'acc',focus:'Push · Chest / Shoulder',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS',`${REST_ANC} · ${RPE[2]}`,[
+    E('Barbell OHP','3×5–6 · RPE 8 CAP · +5% from Wk1 · 3-0-3','str'),
+    E('Close-Grip Bench Press','3×5–6 · RPE 8 · +5% · 3-0-3','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('Scorpion Push-ups','15 reps · 3-0-3','ok'),
+    E('DB Chest Fly on Body Ball','12 reps · 3-0-3','ok'),
+    E('Leg Press (partial ROM) — pain check','15 reps · 3-0-3','mod'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('Alternating DB Chest Press on Body Ball','10 each (20) · 3-0-3','ok'),
+    E('Decline DB Press','AMRAP · 3-0-3','ok'),
+    E('V-Grip Fly (bands)','10 each · 3-0-3','ok'),
+    E('Slow Squat Thrusts','12 reps · 3-0-3','mod'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Back Kicks + DB Shoulder Press','10 each (20) · 3-0-3','ok'),
+    E('TRX Row — drop set','8 reps at angle A; steepen; 6–8 more','ok'),
+    E('Box Step-ups','20 total · controlled','ok'),
+    E('Butt Kicks','60s','ok'),
+    E('Incline DB Bicep Curls','10 each · 3-0-3','ok'),
+    E('Pike Crunches','20 reps','ok'),
+  ]),
+  C('Circuit 4',REST30,[
+    E('DB Military Press','10 reps · 3-0-3','ok'),
+    E('Wood Choppers (band)','12 each side · 3-0-3','ok'),
+    E('Squat hold + pulse (orig: knee tuck jumps)','15 reps · no jump','sub'),
+    E('Static Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+    E('Dead Bugs','10 reps · slow','ok'),
+    E('Hanging Knee Raise + Twist','10 each side','ok'),
+  ]),
+  C('Circuit 5',REST30,[
+    E('Supermans','20 reps · 2s hold','ok'),
+    E('Reverse Crunches','20 reps','ok'),
+    E('Mountain Climbers','45s · slow','mod'),
+    E('Single-Leg Hip Thrust (floor)','15 each · 3-0-3','ok'),
+    E('C2 Row Sprint (orig: treadmill hill)','60s · rate 28 spm','sub'),
+  ]),
+]},
+{d:9,w:2,dayType:'low',focus:'Low-CNS · Pull / Hinge · Drop Set Technique',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · full primer',[...PRIMER_A,...PRIMER_C]),
+  C('Low-CNS Pull/Hinge','RPE ≤6 · groove drop set technique at low load',[
+    E('Romanian Deadlift (moderate)','3×8 · 70% 1RM · 4-0-2 · no grinding','hinge'),
+    E('Titan Glute Hip Thrust','3×8 · RPE 6 · 4-0-2 · full hip lock-out','hinge'),
+    E('Wide-Grip Lat Pull-down','3×12 · 3-0-3 · light · feel stretch','ok'),
+    E('TRX Row','3×12 · 3-0-3','ok'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+    E('Band Pull-Apart','3×15 · 2s squeeze','ok'),
+    E('Goblet Squat','2×15 · 3-0-3 · light','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 18–20 spm · Zone 2','sub')]),
+]},
+{d:10,w:2,rest:true,note:`<strong>Mid-Program Rest</strong><br><br>• Foam roll full body, emphasize posterior chain<br>• Check: Are anchor loads feeling easier? If yes, push to RPE 8 ceiling on Day 11. If still hard, stay conservative.<br>• Log NRS both sites<br>• Infrared sauna + cold plunge<br>• Confirm Day 11 (intensification) loads`},
+{d:11,w:2,dayType:'int',focus:'Intensification · Push · Upper / Core',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_A,...PRIMER_B]),
+  A('STRENGTH ANCHORS — INTENSIFICATION',`${REST_ANC} · ${RPE[2]} · push to RPE 8 ceiling`,[
+    E('Barbell OHP','3×5–6 · RPE 8 ceiling · 3-0-3 · Wk2 peak','str'),
+    E('Close-Grip Bench Press','3×5–6 · RPE 8 ceiling · 3-0-3','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('Scorpion Push-ups','15 reps · 3-0-3','ok'),
+    E('DB Chest Fly','12 reps · 3-0-3','ok'),
+    E('Leg Press (partial ROM)','15 reps · 3-0-3 · pain monitor','mod'),
+    E('Pause Squat (orig: jump squat)','12 reps · 3s hold','sub'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('Decline DB Press','AMRAP · 3-0-3','ok'),
+    E('V-Grip Fly (bands)','10 each · 3-0-3','ok'),
+    E('Slow Squat Thrusts','12 reps · 3-0-3','mod'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Close-Grip Push-ups','AMRAP · 3-0-1','ok'),
+    E('Lateral Lunge','10 each · 3-0-3','mod'),
+    E('Plank-ups','AMRAP · controlled','ok'),
+    E('Single-Leg Box Step-up','10 each · controlled','mod'),
+  ]),
+  C('Circuit 4',REST30,[
+    E('DB Military Press','12 each · 3-0-3','ok'),
+    E('Lateral Band Walk (orig: rock star jumps)','20 steps each','sub'),
+    E('Single-Leg Hip Thrust (floor)','15 each · 3-0-3','ok'),
+    E('Battle Ropes (orig: jumping jacks)','45s','sub'),
+    E('Bicycle Crunches','25 reps · 2s/rep','ok'),
+    E('Hanging Knee Raise + Twist','12 each','ok'),
+  ]),
+  C('Circuit 5 (once)','Once only',[
+    E('C2 Row 30s/30s × 5 (orig: sprints)','RPE 9 efforts · rate 32+ spm','sub'),
+    E('Hanging Knee Raise + Twist','10 each','ok'),
+    E('Reverse Crunches','12 reps','ok'),
+    E('Static Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+  ]),
+]},
+{d:12,w:2,dayType:'low',focus:'Low-CNS · Pull / Hinge · Drop Set Practice',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each',[...PRIMER_FULL]),
+  C('Low-CNS Pull/Hinge','RPE ≤6 · technique only',[
+    E('Romanian Deadlift (light)','3×8 · 60% 1RM · 4-0-2','hinge'),
+    E('Lat Pull-down — Practice Drop Set','Light load: 12 reps; drop 20%; 8 more · groove the pattern','ok'),
+    E('Medium-Underhand Pull-down — Practice','Same · technique only','ok'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+    E('TRX Row','2×12 · 3-0-3','ok'),
+    E('Crab Walk','2×10 steps forward · hips up','ok'),
+    E('Reverse Plank','2×30s hold','ok'),
+    E('Crab Walk back','2×10 steps','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 18–20 spm','sub')]),
+]},
+{d:13,w:2,rest:true,note:`<strong>Week 2 Recovery</strong><br><br>• <strong>Week 3 changes:</strong><br>— RPE cap: 8.5 HARD CEILING<br>— Tempo: 4-0-2 on anchor sets<br>— Anchor load target: +10% from Wk1 baseline<br>— Override: if RPE 8.5 hit early → hold Wk2 load<br><br>• Foam roll, sauna, cold plunge<br>• Log NRS — should be improving with consistent isometrics`},
+{d:14,w:2,rest:true,note:`<strong>Final Rest Before Week 3</strong><br><br>• Full rest<br>• Final day before peak volume block<br>• Mobility: hip flexors, ankle dorsiflexion<br>• Confirm Week 3 loads are calculated`},
+{d:15,w:3,dayType:'acc',focus:'Accumulation · Push · Chest / Tricep',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS',`${REST_ANC} · ${RPE[3]}`,[
+    E('Barbell OHP','3×5–6 · RPE 8.5 HARD CAP · 4-0-2 · +10% from Wk1','str'),
+    E('Close-Grip Bench Press','3×5–6 · RPE 8.5 hard cap · 4-0-2','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('Body Ball Push-ups','12 reps · 3-0-3','ok'),
+    E('Push-ups to failure','AMRAP · 3-0-1','ok'),
+    E('Leg Press (controlled ROM)','15 reps · 3-0-3 · pain monitor','mod'),
+    E('Lateral Band Walk (orig: step plyo)','20 steps each','sub'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('Alternating DB Press on Body Ball','10 each · 3-0-3','ok'),
+    E('Plyometric Push-up (slow land)','8 reps · 3s landing','ok'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+    E('Pause Squat (orig: jump squat)','12 reps · 3s hold','sub'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Warrior Pose + Band Tricep Pressdown','25s hold each leg + 10 pressdowns','ok'),
+    E('Weighted Dips','AMRAP · 3-0-3','ok'),
+    E('Hanging Knee Raise','12 reps · controlled','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Static Lunge + Lateral DB Raise','10 each (20) · 3-0-3','ok'),
+  ]),
+]},
+{d:16,w:3,dayType:'low',focus:'Low-CNS · Pull / Hinge · Active Recovery',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · low-CNS max primer volume',[...PRIMER_FULL]),
+  C('Low-CNS Pull/Hinge','RPE ≤6 · technique and blood flow',[
+    E('RDL (moderate)','3×8 · 70% 1RM · 4-0-2','hinge'),
+    E('Titan Glute Hip Thrust (moderate)','3×8 · RPE 6 · 4-0-2','hinge'),
+    E('Lat Pull-down (light)','3×12 · 3-0-3','ok'),
+    E('Band Glute Kickback','2×15 each · 2s hold','ok'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+    E('TRX Row','2×12 · 3-0-3','ok'),
+    E('Band Pull-Apart','3×15','ok'),
+    E('Dead Bugs','2×10','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 18–20 spm · Zone 2','sub')]),
+]},
+{d:17,w:3,rest:true,note:`<strong>Mid-Week 3 Rest</strong><br><br>• Peak volume week — recovery quality critical<br>• Foam roll: glutes, hip flexors, thoracic spine<br>• Sauna 20 min → cold plunge 10 min<br>• Log NRS — if quad >4 this morning, substitute Bowflex M8 for C2 in next session<br>• Tomorrow (Day 18) is INTENSIFICATION — the hardest training day of Week 3`},
+{d:18,w:3,dayType:'int',focus:'Intensification · Push · Full Body · Week 3 Peak',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_A,...PRIMER_B]),
+  A('STRENGTH ANCHORS — WEEK 3 PEAK',`${REST_ANC} · ${RPE[3]} · PROGRAM INTENSITY PEAK FOR PUSH`,[
+    E('Barbell OHP — WEEK 3 PEAK','3×5–6 · RPE 8.5 hard cap · 4-0-2 · record load','str'),
+    E('Close-Grip Bench Press — WEEK 3 PEAK','3×5–6 · RPE 8.5 hard cap · 4-0-2','str'),
+  ]),
+  C('Circuit 1',REST30,[
+    E('Body Ball Push-ups','12 reps · 3-0-3','ok'),
+    E('Push-ups to failure','AMRAP','ok'),
+    E('Leg Press (partial ROM)','15 reps · 3-0-3','mod'),
+    E('Lateral Band Walk','20 steps each','sub'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('Alternating DB Press on Body Ball','10 each · 3-0-3','ok'),
+    E('Plyometric Push-up (slow land)','8 reps','ok'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+    E('Pause Squat','12 reps · 3s hold','sub'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Warrior Pose + Band Tricep Pressdown','25s + 10 pressdowns each','ok'),
+    E('Weighted Dips','AMRAP · 3-0-3','ok'),
+    E('Hanging Knee Raise','12 reps','ok'),
+    E('Static Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+  ]),
+  C('Circuit 4',REST30,[
+    E('Pike Push-ups','AMRAP · 3-0-3','ok'),
+    E('Goblet Squat + Press','10 reps · squat + press at top','ok'),
+    E('Lunge + Military DB Press to failure','10 each · 3-0-3','mod'),
+    E('Weighted Dips','AMRAP · 3-0-3','ok'),
+    E('Step-out Burpee','12 reps · no jump','mod'),
+    E('Battle Ropes','45s alternating waves','sub'),
+  ]),
+  C('Circuit 5',REST30,[
+    E('Battle Ropes','45s','sub'),
+    E('Lateral Band Walk','20 steps each','sub'),
+    E('Bicycle Crunches','25 reps · 2s/rep','ok'),
+    E('Hanging Knee Raise + Twist','12 each','ok'),
+    E('Dead Bugs','12 reps','ok'),
+  ]),
+]},
+{d:19,w:3,dayType:'low',focus:'Low-CNS · Pull / Hinge · Recovery Insurance',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each',[...PRIMER_A,...PRIMER_C]),
+  C('Low-CNS Pull/Hinge','RPE ≤6 · blood flow + pattern maintenance',[
+    E('RDL (light)','3×8 · 60% 1RM · 4-0-2 · no grind','hinge'),
+    E('Lat Pull-down (light)','3×12 · 3-0-3','ok'),
+    E('TRX Row','3×12 · 3-0-3','ok'),
+    E('Lying Leg Curl','2×12 · 3-0-3','ok'),
+    E('Goblet Squat','2×15 · light · 3-0-3','ok'),
+    E('Supermans','2×15 · 2s hold','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 18 spm · Zone 1','sub')]),
+]},
+{d:20,w:3,rest:true,note:`<strong>Week 3 Recovery — Pre-Deload Prep</strong><br><br>• <strong>CRITICAL: Week 4 is your deload. Do not skip it.</strong><br>• Week 4: circuits ONCE only · anchors 3×4 at Wk3 +2.5% · RPE 9 allowed<br>• Foam roll everything · Sauna + cold plunge<br>• Log NRS — should be near baseline after consistent isometric work`},
+{d:21,w:3,dayType:'int',focus:'Intensification · Full Body · Push/Pull Combo',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS',`${REST_ANC} · ${RPE[3]}`,[
+    E('Barbell RDL — WEEK 3 PEAK','3×5–6 · RPE 8.5 hard cap · 4-0-2 · record load','hinge'),
+    E('Titan Hip Thrust — WEEK 3 PEAK','3×5–6 · RPE 8.5 hard cap · 4-0-2','hinge'),
+  ]),
+  C('Activation (once)','Once only · warm-up',[
+    E('DB Chest Fly on Body Ball','12 reps · activation · 3-0-3','ok'),
+    E('Goblet Squat (loaded)','15 reps · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Butt Kicks','60s','ok'),
+  ]),
+  C('Circuit 2',REST30,[
+    E('DB Chest Fly on Body Ball','12 reps · 3-0-3','ok'),
+    E('Plyometric Push-up (controlled)','8 reps · 3s land','ok'),
+    E('Leg Press (pyramid)','20→12→6–8 · 3-0-3 · pain monitor','mod'),
+    E('DB Squat Swings','12 reps · 3-0-3','ok'),
+    E('Slow Reverse Lunge','10 each · 3-0-3','sub'),
+    E('Wide-Grip Lat Pull-down','15 reps · 3-0-3','ok'),
+    E('Single-Leg Hip Thrust (floor)','15 each · 3-0-3','ok'),
+  ]),
+  C('Circuit 3',REST30,[
+    E('Scorpion Push-ups with DB','10 each · 3-0-3','ok'),
+    E('Box Step-up (controlled)','10 each · 3-0-3','mod'),
+    E('Alternating DB Press on Body Ball','10 each · 3-0-3','ok'),
+    E('Surrenders (DB)','10 each · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Plank Walk-outs','10 reps','ok'),
+  ]),
+]},
+// WEEK 4 DELOAD
+{d:22,w:4,dayType:'del',focus:'Deload · Pull / Hinge · Neural Peak · Circuits Once',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_A,...PRIMER_C]),
+  A('STRENGTH ANCHORS — DELOAD PEAK',`3×4 · Wk3 +2.5% · RPE 9 allowed · 3 min rest`,[
+    E('Barbell RDL — PROGRAM PEAK','3×4 · highest load of program · 4-0-2 · record result','hinge'),
+    E('Barbell Row — PEAK LOAD','3×4 · Wk3 +2.5% · 4-0-2 · record result','str'),
+  ]),
+  A('HIP THRUST — PROGRAM PEAK','3×4 · 3 min rest',[
+    E('Titan Glute Machine — PEAK LOAD','3×4 · highest load of 30 days · 4-0-2','hinge'),
+  ]),
+  C('Circuit 1 — DROP SET (once)','Once only',[
+    E('Wide-Grip Lat Pull-down — DROP SET','Max 1–3; drop ⅓; hold midpoint 20s; 6–8 more','ok'),
+    E('Medium-Underhand Pull-down — DROP SET','Same protocol','ok'),
+    E('Single-Leg Hip Thrust (floor)','12 each · 3-0-3','ok'),
+    E('Pause Squat','10 reps · 3s hold','sub'),
+  ]),
+  C('Circuit 2 (once)','Once only',[
+    E('Wide-Grip Lat Pull-down','12 reps · 3-0-3','ok'),
+    E('DB Squat Swing','10 reps · 3-0-3','ok'),
+    E('Slow Reverse Lunge','10 each · 3-0-3','sub'),
+    E('Plank Row (DB)','10 reps · 3-0-3','ok'),
+    E('Supermans','20 reps · 2s hold','ok'),
+    E('Dead Bugs','10 reps','ok'),
+  ]),
+  C('Circuit 3 (once)','Once only',[
+    E('Goblet Squat + Bicep Curl','10 reps · 3-0-3','ok'),
+    E('C2 Row Sprint','60s · rate 28 spm','sub'),
+    E('Static Lunge + Anterior DB Raise','10 each · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','sub'),
+    E('Side Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+  ]),
+]},
+{d:23,w:4,dayType:'low',focus:'Low-CNS · Deload · Full Tendon Primer + Light Movement',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · deload week full primer',[...PRIMER_FULL]),
+  C('Low-CNS Deload Recovery','RPE ≤5 · blood flow only',[
+    E('RDL (light — technique)','2×8 · 50% 1RM · groove only','hinge'),
+    E('Wide-Grip Lat Pull-down (light)','2×12 · 3-0-3 · RPE 5','ok'),
+    E('Goblet Squat (light)','2×12 · 3-0-3','ok'),
+    E('TRX Row','2×10 · 3-0-3','ok'),
+    E('Band Glute Kickback','2×12 each · 2s hold','ok'),
+    E('Dead Bugs','2×10','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','15 min · rate 16–18 spm · Zone 1','sub')]),
+]},
+{d:24,w:4,rest:true,note:`<strong>Deload Rest</strong><br><br>• Foam roll full body · Sauna + cold plunge<br>• Log NRS — should show improvement after consistent isometrics<br>• Day 25: INTENSIFICATION · Push · program peak load for OHP and bench<br>• You'll feel strong after this deload`},
+{d:25,w:4,dayType:'del',focus:'Deload · Push · Neural Peak · Circuits Once',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS — PUSH PEAK','3×4 · Wk3 +2.5% · RPE 9 allowed · 3 min rest',[
+    E('Barbell OHP — PROGRAM PEAK','3×4 · highest load of program · 4-0-2 · record result','str'),
+    E('Close-Grip Bench Press — PEAK','3×4 · Wk3 +2.5% · 4-0-2 · record result','str'),
+  ]),
+  C('Activation (once)','Once',[
+    E('DB Chest Fly','12 reps · activation','ok'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Butt Kicks','60s','ok'),
+  ]),
+  C('Circuit 2 (once)','Once',[
+    E('DB Chest Fly on Body Ball','12 reps · 3-0-3','ok'),
+    E('Plyometric Push-up (controlled)','8 reps','ok'),
+    E('Leg Press (pyramid)','20→12→6–8 · 3-0-3','mod'),
+    E('DB Squat Swing','10 reps','ok'),
+    E('Slow Reverse Lunge','10 each · 3-0-3','sub'),
+    E('Wide-Grip Lat Pull-down','12 reps · 3-0-3','ok'),
+    E('Single-Leg Hip Thrust (floor)','12 each · 3-0-3','ok'),
+  ]),
+  C('Circuit 3 (once)','Once',[
+    E('Scorpion Push-ups with DB','10 each · 3-0-3','ok'),
+    E('Box Step-up (controlled)','10 each','mod'),
+    E('Alternating DB Press on Body Ball','10 each · 3-0-3','ok'),
+    E('Surrenders (DB)','10 each · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Plank Walk-outs','10 reps','ok'),
+  ]),
+  C('Circuit 4 (once)','Once',[
+    E('Dips (weighted)','AMRAP · 3-0-3','ok'),
+    E('Lunge + DB Military Press to failure','10 each · 3-0-3','mod'),
+    E('Lateral Band Walk','20 steps each','sub'),
+    E('Step-out Burpee','10 · no jump','mod'),
+    E('Bench Dips','AMRAP · 3-0-3','ok'),
+  ]),
+]},
+{d:26,w:4,rest:true,note:`<strong>Deload Rest — Final 4 Days</strong><br><br>• Foam roll: glutes, hip flexors, calves, thoracic<br>• Sauna + cold plunge<br>• Log NRS — if quad <2/10 this morning, the isometric protocol has worked<br>• Days 27–30 are the final 4 training days`},
+{d:27,w:4,rest:true,note:`<strong>Final Rest Before Last 3 Days</strong><br><br>• Full rest<br>• Light mobility only<br>• Pre-sleep: CJC/Ipamorelin + 40g casein<br>• Day 28: low-CNS · Day 29: intensification · Day 30: final day`},
+{d:28,w:4,dayType:'low',focus:'Low-CNS · Pre-Final · Tendon + Blood Flow',blocks:[
+  T('TENDON PRIMER — EXTENDED','5 sets each · final primer session',[...PRIMER_FULL]),
+  C('Low-CNS Pre-Final Flush','RPE ≤5 · blood flow only · do not fatigue',[
+    E('RDL (light)','2×8 · technique only','hinge'),
+    E('Lat Pull-down (light)','2×12 · RPE 5','ok'),
+    E('Goblet Squat','2×12 · light · 3-0-3','ok'),
+    E('Band Pull-Apart','2×15','ok'),
+    E('TRX Row','2×10 · 3-0-3','ok'),
+    E('Dead Bugs','2×10','ok'),
+    E('Supermans','2×12 · 2s hold','ok'),
+  ]),
+  C('Finisher',' ',[E('C2 Row Easy','10 min · rate 16–18 spm · Zone 1 · final flush','sub')]),
+]},
+{d:29,w:4,dayType:'del',focus:'Intensification · Pull / Hinge · Penultimate Session',blocks:[
+  T('TENDON PRIMER','3 sets each · 2 min rest',[...PRIMER_A,...PRIMER_B]),
+  A('STRENGTH ANCHORS — PENULTIMATE PEAK','3×4 · Wk3 +2.5% · RPE 9 allowed · 3 min rest',[
+    E('Barbell RDL — FINAL PULL PEAK','3×4 · program peak · 4-0-2 · record final load','hinge'),
+    E('Titan Hip Thrust — FINAL PEAK','3×4 · program peak · 4-0-2 · record final load','hinge'),
+  ]),
+  C('Circuit 1 (once)','Once',[
+    E('DB Chest Press (pyramid)','15→8→3–6 · 3-0-3','ok'),
+    E('DB Chest Fly on Body Ball','Pyramid · 3-0-3','ok'),
+    E('Leg Press','15 reps · 3-0-3 · pain check','mod'),
+  ]),
+  C('Circuit 2 (once)','Once',[
+    E('Close-Grip Push-ups on Body Ball','10 · 3-0-3','ok'),
+    E('Frog Push-ups','10 · anterior knee monitor','mod'),
+    E('Battle Ropes (orig: jump rope 2 min)','60s waves','sub'),
+    E('Slow Reverse Lunge to failure','3-0-3 · no jump','sub'),
+    E('Box-Assisted Single-Leg Squat','10 each · monitor quad','mod'),
+  ]),
+  C('Circuit 3 (once)','Once',[
+    E('Leg Press + isometric hold on last rep','10 + 5s hold · pain check','mod'),
+    E('Pike Push-ups','10 · 3-0-3','ok'),
+    E('Static Lunge + Lateral DB Raise','10 each · 3-0-3','ok'),
+    E('Mountain Climbers — slow','45s · 2s/rep','mod'),
+    E('Side Plank','60s each side','ok'),
+  ]),
+  C('Circuit 4 (once)','Once',[
+    E('Goblet Squat + Band Pull-Apart at top','12 · 3-0-3','ok'),
+    E('Battle Ropes','60s','sub'),
+    E('Hammer Curls (alternating)','15 each · 3-0-3','ok'),
+    E('Crossover Lunge + Hammer Curl','10 each · 3-0-3','mod'),
+    E('Dead Bugs','12 reps','ok'),
+  ]),
+  C('Circuit 5 Finisher (once)','Once',[
+    E('C2 Row Sprint (orig: incline 15)','60s · rate 30 spm · RPE 8','sub'),
+    E('Hanging Knee Raise + Twist','10 each','ok'),
+    E('Wide-Grip DB Row','12 · 3-0-3','ok'),
+    E('DB Military Press on Body Ball','10 · 3-0-3','ok'),
+    E('Concentration Curls (static squat)','12 each · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','sub'),
+  ]),
+]},
+{d:30,w:4,dayType:'del',focus:'FINAL DAY · Full Body · All Anchors at Peak',blocks:[
+  T('TENDON PRIMER — FINAL','3 sets each · close out the protocol cleanly',[...PRIMER_A,...PRIMER_B,...PRIMER_C]),
+  A('STRENGTH ANCHORS — PROGRAM FINALE','3×4–5 · absolute peak loads · RPE 9 · 3 min rest · record everything',[
+    E('Barbell Back Squat — PROGRAM PEAK','3×4–5 · heaviest load of 30 days · 4-0-2 · record','str'),
+    E('Barbell OHP — PROGRAM PEAK','3×4–5 · heaviest · 4-0-2 · record','str'),
+  ]),
+  C('Circuit 1 — Final Opener (once)','Once · this is the benchmark',[
+    E('Bicycle Crunches — 100 REPS','Unbroken if possible · 2s/rep · Day 30 benchmark','ok'),
+    E('Wide-Grip Lat Pull-down (heavy)','8 reps · 4-0-2 · peak load','ok'),
+    E('Controlled Reverse Lunge','20 alternating · 3-0-3','mod'),
+    E('Plank Row (DB)','15 reps · 3-0-3','ok'),
+  ]),
+  C('Circuit 2 (once)','Once',[
+    E('Slow Reverse Lunge','10 each · 3-0-3','sub'),
+    E('Goblet Squat','15 reps · 3-0-3','ok'),
+    E('Swing Kicks','30 total · controlled','ok'),
+    E('Slow Reverse Lunge','10 each · 3-0-3','sub'),
+  ]),
+  C('Circuit 3 (once)','Once',[
+    E('TRX Row','12 reps · 3-0-3','ok'),
+    E('Crossover Lunge + Hammer Curl','10 each · 3-0-3','mod'),
+    E('C2 Row Sprint','60s · rate 30+ spm · RPE 8','sub'),
+    E('Box Step-up (controlled)','10 each · 3-0-3','ok'),
+    E('Lateral Band Walk','20 steps each','ok'),
+    E('Plank Walk-out','10 reps','ok'),
+  ]),
+  C('Circuit 4 (once)','Once',[
+    E('Box Step-up','10 each · 3-0-3','ok'),
+    E('Glute Kickback (band)','15 each · 2s hold','ok'),
+    E('Goblet Squat','12 reps · 3-0-3','ok'),
+    E('Back Extensions (cage or floor)','12 · 3-0-3','ok'),
+    E('Pike Crunch','15 reps','ok'),
+    E('Alternating DB Press on Roman Chair','15 reps · 3-0-3','ok'),
+  ]),
+  C('🏆 Final Circuit (once)','Last circuit of the program',[
+    E('Wide-Grip DB Row','12 reps · 3-0-3 · final pull','ok'),
+    E('DB Military Press Prone on Body Ball','10 reps · 3-0-3','ok'),
+    E('Concentration Curls (static squat)','12 each · 3-0-3','ok'),
+    E('Lateral Band Walk (orig: rock star jumps)','20 steps each · final metabolic','sub'),
+    E('🏆 PROGRAM COMPLETE — Record all anchor loads','30 days. RPE-autoregulated. Undulated. Isometric-primed.','ok'),
+  ]),
+]},
+]; // end DAYS
+
+// ═══════════════════ STATE ═══════════════════
+let currentDay=1;
+const doneDays=new Set();
+
+// ═══════════════════ DERIVED ═══════════════════
+const PHASE_CSS={1:'pc-acc',2:'pc-acc',3:'pc-int',4:'pc-del'};
+const DTILE_CLS={acc:'acc',low:'low',int:'intensify',del:'del'};
+const HERO_CLS={acc:'sh-acc',low:'sh-low',int:'sh-int',del:'sh-del'};
+const RPE_CLS_MAP={acc:'rpe-acc',low:'rpe-low',int:'rpe-int',del:'rpe-del'};
+const TAG_CLS={ok:'tag-ok',mod:'tag-mod',sub:'tag-sub',str:'tag-str',hinge:'tag-hinge',iso:'tag-iso'};
+const TAG_LBL={ok:'✓',mod:'MOD',sub:'SUB',str:'ANCHOR',hinge:'HINGE',iso:'ISO'};
+const BLOCK_ICON={tendon:'💗',anchor:'🟡',circ:''};
+const CIRC_NUMS='C1 C2 C3 C4 C5 C6 C7'.split(' ');
+
+// ═══════════════════ SESSION PROGRESS ═══════════════════
+function sessStats(d){
+  const dv=document.getElementById(`dv${d}`);
+  if(!dv) return {done:0,total:0};
+  const all=dv.querySelectorAll('.exrow');
+  const done=dv.querySelectorAll('.exrow.done');
+  return {done:done.length,total:all.length};
+}
+function updateSessRing(d){
+  const {done,total}=sessStats(d);
+  const pct=total?Math.round(done/total*100):0;
+  const circ=2*Math.PI*22; // r=22 in SVG
+  const ring=document.getElementById(`sr${d}`);
+  if(ring) ring.style.strokeDashoffset=circ*(1-pct/100);
+  const pctEl=document.getElementById(`srp${d}`);
+  if(pctEl) pctEl.textContent=pct+'%';
+  const doneEl=document.getElementById(`srd${d}`);
+  if(doneEl) doneEl.textContent=done+'/'+total;
+}
+
+// ═══════════════════ BUILD RAIL ═══════════════════
+function buildRail(){
+  const rail=document.getElementById('rail');
+  let html='',lastW=0;
+  DAYS.forEach(d=>{
+    if(d.w!==lastW){html+=`<div class="wk-label">W${d.w}</div>`;lastW=d.w;}
+    const tc=d.rest?'rest-day':(DTILE_CLS[d.dayType]||'');
+    html+=`<div class="dtile ${tc}" id="tile${d.d}" onclick="goDay(${d.d})">
+      <div class="dtile-num">${d.d}</div>
+      <div class="dtile-dot"></div>
+    </div>`;
+  });
+  rail.innerHTML=html;
+}
+
+// ═══════════════════ BUILD DAYS ═══════════════════
+function buildDays(){
+  const con=document.getElementById('dayContainer');
+  let html='';
+  DAYS.forEach(day=>{
+    html+=`<div class="dview" id="dv${day.d}">`;
+    const heroTypeCls=day.rest?'sh-rest':(HERO_CLS[day.dayType]||'sh-acc');
+    const dayLabel=`Day ${day.d}${day.d===30?' 🏆':''}`;
+    const typeLabel=day.rest?'Rest Day':day.dayType==='acc'?'Accumulation':day.dayType==='low'?'Low-CNS':day.dayType==='int'?'Intensification':day.dayType==='del'?'Deload':'Training';
+    // Session hero card
+    const circ=2*Math.PI*22;
+    html+=`<div class="session-hero ${heroTypeCls}">
+      <div class="hero-top">
+        <div>
+          <div class="hero-day">${day.w ? PHASE_LABEL[day.w] : ''} · ${typeLabel}</div>
+          <div class="hero-title">${dayLabel}</div>
+          <div class="hero-focus">${day.focus||''}</div>
+        </div>
+        ${!day.rest?`
+        <div class="sess-ring">
+          <svg viewBox="0 0 52 52" width="52" height="52">
+            <circle class="sr-bg" cx="26" cy="26" r="22"/>
+            <circle class="sr-fill" id="sr${day.d}" cx="26" cy="26" r="22"
+              stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${circ.toFixed(2)}"/>
+          </svg>
+          <div class="sr-label">
+            <div class="sr-pct" id="srp${day.d}">0%</div>
+            <div class="sr-done" id="srd${day.d}">0/0</div>
+          </div>
+        </div>`:''}
+      </div>`;
+    // RPE strip for training days
+    if(!day.rest&&day.dayType!=='low'){
+      const rpeClass=RPE_CLS_MAP[day.dayType]||'rpe-acc';
+      html+=`<div class="rpe-strip">
+        <span class="rpe-label">Target</span>
+        <span class="rpe-val ${rpeClass}">${RPE_SHORT[day.w]}</span>
+        <span class="rpe-override">Override: cap hit → hold prev load</span>
+      </div>`;
+    } else if(!day.rest&&day.dayType==='low'){
+      html+=`<div class="rpe-strip">
+        <span class="rpe-label">CNS Load</span>
+        <span class="rpe-val rpe-low">RPE ≤ 6 · No anchors</span>
+        <span class="rpe-override">Primer volume ×2 today</span>
+      </div>`;
+    }
+    html+=`</div>`; // end session-hero
+
+    if(day.rest){
+      html+=`<div class="rest-hero">
+        <div class="rest-orb">${day.w===4?'🔋':'🛌'}</div>
+        <div class="rest-title">${day.w===4?'Deload Rest':'Rest Day'}</div>
+        <div class="rest-body">${day.note||''}</div>
+      </div>
+      <button class="done-btn" onclick="markDone(${day.d})">✓ Mark Day Complete</button>`;
+    } else {
+      // Collapsed info rows (not stacked banners)
+      html+=`<div class="info-row ir-nutr"><span class="info-icon">💊</span><span><strong>Pre:</strong> 15g collagen + 50mg Vit C · 30 min before &nbsp;·&nbsp; <strong>Post:</strong> 35–40g protein + 5g creatine within 30 min</span></div>`;
+      if(day.dayType==='del')
+        html+=`<div class="info-row ir-deload"><span class="info-icon">🔽</span><span><strong>Deload week:</strong> Circuits ONCE only. Anchors 3×4 at Wk3 +2.5%. Supercompensation week.</span></div>`;
+      if(day.dayType==='low')
+        html+=`<div class="info-row ir-low"><span class="info-icon">⛵</span><span><strong>Low-CNS:</strong> No heavy loading. RPE ≤6. Resist the urge to push harder.</span></div>`;
+      html+=`<div class="info-row ir-inj"><span class="info-icon">⚠️</span><span>Impact cardio substituted. <strong style="color:#f07090">PINK</strong>=ISO · <strong style="color:#f5d060">GOLD</strong>=ANCHOR · <strong style="color:#a78bfa">PURPLE</strong>=HINGE</span></div>`;
+
+      // Blocks
+      let circCount=0;
+      day.blocks.forEach((block,bi)=>{
+        const bid=`b${day.d}_${bi}`;
+        const isT=block.type==='tendon';
+        const isA=block.type==='anchor';
+        const isC=block.type==='circ';
+        const blockCls=isT?'block-tendon':isA?'block-anchor':'block-circ';
+        const icon=isT?'💗':isA?'🟡':isC?(circCount===0?'🔥':circCount===1?'⚡':circCount===2?'💪':circCount===3?'🏃':circCount===4?'🎯':'🔄'):'';
+        if(isC) circCount++;
+        const blockTitle=isT?block.n:isA?block.n:block.n;
+        html+=`<div class="block ${blockCls}" id="${bid}">
+          <div class="block-hd" onclick="toggleB('${bid}')">
+            <div class="block-icon">${icon}</div>
+            <div class="block-text">
+              <div class="block-name">${blockTitle}</div>
+              <div class="block-note">${block.note}</div>
+            </div>
+            <div class="block-right">
+              <div class="block-prog" id="bp_${bid}">0/${block.ex.length}</div>
+              <div class="block-chev">›</div>
+            </div>
+          </div>`;
+        if(isT)
+          html+=`<div class="block-strip">💗 ${block.note} · Use 45s ISO preset timer · 2 min rest after each hold</div>`;
+        else if(isA)
+          html+=`<div class="block-strip">🏋️ ${block.note} · Use 2:30 or 3 min preset</div>`;
+        else
+          html+=`<div class="block-strip">⏱ ${block.note} · 30s preset</div>`;
+
+        // Exercises
+        html+=`<div class="block-body">`;
+        block.ex.forEach((ex,ei)=>{
+          const eid=`e${day.d}_${bi}_${ei}`;
+          const tc=TAG_CLS[ex.f]||'tag-ok';
+          const tl=TAG_LBL[ex.f]||'✓';
+          html+=`<div class="exrow" id="${eid}" onclick="toggleEx('${eid}','${bid}',${block.ex.length},${day.d})">
+            <div class="exchk"><div class="exchk-inner"></div></div>
+            <div class="exinfo">
+              <div class="exname">${ex.n}</div>
+              ${ex.d?`<div class="exdet">${ex.d}</div>`:''}
+            </div>
+            <span class="tag ${tc}">${tl}</span>
+          </div>`;
+        });
+        html+=`</div></div>`; // end block-body, block
+      });
+
+      // Completion card
+      html+=`<div class="done-card" id="dc${day.d}">
+        <div class="done-ring-wrap">
+          <svg viewBox="0 0 72 72" width="72" height="72">
+            <circle class="dr-bg" cx="36" cy="36" r="32"/>
+            <circle class="dr-fill" cx="36" cy="36" r="32"/>
+          </svg>
+          <div class="done-ring-icon">${day.d===30?'🏆':'🔥'}</div>
+        </div>
+        <div class="done-title">${day.d===30?'Program Complete':'Day '+day.d+' Done'}</div>
+        <div class="done-sub">${day.d===30?'30 days. RPE-autoregulated. Undulated. Isometric-primed.':'Post-session: 35–40g protein + 5g creatine now · log NRS on waking tomorrow'}</div>
+      </div>`;
+    }
+    html+=`</div>`; // end dview
+  });
+  con.innerHTML=html;
+}
+
+// ═══════════════════ NAVIGATION ═══════════════════
+function goDay(d){
+  document.querySelectorAll('.dview').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.dtile').forEach(t=>t.classList.remove('on'));
+  document.getElementById(`dv${d}`).classList.add('on');
+  document.getElementById(`tile${d}`).classList.add('on');
+  currentDay=d;
+  const day=DAYS.find(x=>x.d===d);
+  // Update header
+  const pill=document.getElementById('phasePill');
+  pill.textContent=PHASE_LABEL[day.w]||'Week '+day.w;
+  pill.className='phase-chip '+(PHASE_CSS[day.w]||'pc-acc');
+  document.getElementById('progTitle').textContent=`Day ${d} of 30`;
+  document.getElementById('progSub').textContent=PHASE_LABEL[day.w]||'';
+  // Scroll rail
+  document.getElementById(`tile${d}`).scrollIntoView({block:'nearest',behavior:'smooth'});
+  // Scroll panel
+  document.getElementById('panel-workout').scrollTop=0;
+  // Update session ring
+  setTimeout(()=>updateSessRing(d),50);
+}
+
+// ═══════════════════ TOGGLE BLOCKS ═══════════════════
+function toggleB(id){document.getElementById(id).classList.toggle('col');}
+
+// ═══════════════════ EXERCISE TOGGLE ═══════════════════
+function toggleEx(eid,bid,total,dayId){
+  const row=document.getElementById(eid);
+  const wasDone=row.classList.contains('done');
+  row.classList.toggle('done');
+  // Update block progress counter
+  const block=document.getElementById(bid);
+  const done=block.querySelectorAll('.exrow.done').length;
+  const prog=document.getElementById(`bp_${bid}`);
+  if(prog) prog.textContent=`${done}/${total}`;
+  // Update session ring
+  updateSessRing(dayId);
+  // Check day completion
+  checkDayDone(dayId);
+}
+function checkDayDone(d){
+  const dv=document.getElementById(`dv${d}`);
+  if(!dv) return;
+  const all=dv.querySelectorAll('.exrow').length;
+  if(all===0) return;
+  if(dv.querySelectorAll('.exrow.done').length===all) markDone(d);
+}
+function markDone(d){
+  doneDays.add(d);
+  const dc=document.getElementById(`dc${d}`);
+  if(dc) dc.classList.add('show');
+  document.getElementById(`tile${d}`).classList.add('done');
+  // Update global progress
+  const pct=Math.round(doneDays.size/30*100);
+  const circumference=81.68; // 2*PI*13
+  const offset=circumference*(1-pct/100);
+  document.getElementById('progArc').style.strokeDashoffset=offset;
+  document.getElementById('progArcLbl').textContent=doneDays.size;
+  document.getElementById('progBar').style.width=pct+'%';
+  document.getElementById('progLbl').textContent=`${doneDays.size}/30`;
+  if(d<30) setTimeout(()=>goDay(d+1),1600);
+}
+
+// ═══════════════════ TAB SWITCH ═══════════════════
+function switchTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  // Only clear non-timer nav items
+  document.querySelectorAll('.bnav-item:not(.timer-nav)').forEach(b=>b.classList.remove('on'));
+  document.getElementById(`panel-${name}`).classList.add('on');
+  btn.classList.add('on');
+  // Close timer panel when switching tabs
+  if(timerOpen){
+    timerOpen=false;
+    document.getElementById('timerPanel').classList.remove('open');
+    document.getElementById('timerFAB').classList.remove('active');
+  }
+}
+function toggleTimerPanel(){
+  timerOpen=!timerOpen;
+  document.getElementById('timerPanel').classList.toggle('open',timerOpen);
+  document.getElementById('timerFAB').classList.toggle('active',timerOpen);
+}
+
+// ═══════════════════ TIMER ═══════════════════
+let tSec=45,tOrig=45,tOn=false,tInt=null,tLabel='Isometric Hold';
+let timerOpen=false;
+function toggleTimerPanel(){
+  timerOpen=!timerOpen;
+  document.getElementById('timerPanel').classList.toggle('open',timerOpen);
+  document.getElementById('timerFAB').classList.toggle('active',timerOpen);
+}
+function tPreset(s,btn,lbl){
+  document.querySelectorAll('.preset').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  tOrig=s;tSec=s;tOn=false;tLabel=lbl||'Rest';
+  clearInterval(tInt);
+  document.getElementById('tBtn').textContent='Start';
+  document.getElementById('tBtn').className='tp-btn tp-go';
+  tDraw();
+}
+function tToggle(){
+  if(tOn){
+    clearInterval(tInt);tOn=false;
+    document.getElementById('tBtn').textContent='Resume';
+    document.getElementById('tBtn').className='tp-btn tp-go';
+  } else {
+    tOn=true;
+    document.getElementById('tBtn').textContent='Pause';
+    document.getElementById('tBtn').className='tp-btn tp-pause';
+    tInt=setInterval(()=>{
+      tSec--;tDraw();
+      if(tSec<=0){
+        clearInterval(tInt);tOn=false;
+        document.getElementById('tBtn').textContent='Start';
+        document.getElementById('tBtn').className='tp-btn tp-go';
+        document.getElementById('tDisp').className='tp-digit';
+        document.getElementById('tDisp').style.color='var(--rose)';
+        setTimeout(()=>{tSec=tOrig;tDraw();document.getElementById('tDisp').style.color='';},2200);
+      }
+    },1000);
+  }
+}
+function tReset(){
+  clearInterval(tInt);tOn=false;tSec=tOrig;
+  document.getElementById('tBtn').textContent='Start';
+  document.getElementById('tBtn').className='tp-btn tp-go';
+  tDraw();
+}
+function tDraw(){
+  const m=Math.floor(tSec/60),s=tSec%60;
+  document.getElementById('tDisp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  document.getElementById('tLbl').textContent=tLabel;
+  if(!tOn){document.getElementById('tDisp').style.color='';return;}
+  document.getElementById('tDisp').style.color=tSec<=5?'var(--amber)':'var(--emerald)';
+}
+
+// ═══════════════════ GLOSSARY ═══════════════════
+const GLOSS = [
+  // ── Training Methodology ──
+  { cat:'Training Methodology', term:'RPE', full:'Rate of Perceived Exertion', def:'A 1–10 scale measuring effort relative to your maximum. RPE 7 = 3 reps left. RPE 10 = absolute max. Used to autoregulate load daily rather than chasing fixed percentages.' },
+  { cat:'Training Methodology', term:'1RM', full:'One-Rep Maximum', def:'The maximum weight you can lift for exactly one repetition with good form. All percentage-based loading in this program references your estimated 1RM.' },
+  { cat:'Training Methodology', term:'MRT', full:'Metabolic Resistance Training', def:'Circuit-based training combining resistance exercises with minimal rest to simultaneously drive strength and cardiovascular adaptation. The core format of this program.' },
+  { cat:'Training Methodology', term:'EPOC', full:'Excess Post-Exercise Oxygen Consumption', def:'The elevated calorie burn that continues for 24–48 hours after a high-intensity workout. MRT-style circuits produce significantly more EPOC than steady-state cardio. (Boutcher 2011)' },
+  { cat:'Training Methodology', term:'TUT', full:'Time Under Tension', def:'The total duration a muscle is under load during a set. A 3-0-3 tempo on 10 reps = 60 seconds TUT. Higher TUT drives greater hypertrophic and tendon adaptation stimulus.' },
+  { cat:'Training Methodology', term:'AMRAP', full:'As Many Reps As Possible', def:'Perform as many clean repetitions as possible within a set, stopping just before form breaks down. Not true failure — stop at technical failure.' },
+  { cat:'Training Methodology', term:'Drop Set', full:'Drop Set', def:'Perform a set to near-failure, immediately reduce the load by ~20–33%, and continue for more reps without rest. Used in this program on pull-down and row exercises in Weeks 2–4 to extend stimulus.' },
+  { cat:'Training Methodology', term:'Pyramid', full:'Pyramid Loading', def:'Progressively increasing or decreasing weight across sets. In this program: first set light (20 reps), second set heavier (12 reps), third set heaviest (6–8 reps). Auto-regulates warm-up into working load.' },
+  { cat:'Training Methodology', term:'Accumulation', full:'Accumulation Phase', def:'A training block (Weeks 1–2) emphasising higher volume at moderate intensity (RPE 7–8). Builds work capacity and movement quality before the intensification phase.' },
+  { cat:'Training Methodology', term:'Intensification', full:'Intensification Phase', def:'A training block (Week 3) emphasising higher intensity at lower relative volume (RPE 8.5 cap). Drives peak neural output and strength gains after the accumulation base is built.' },
+  { cat:'Training Methodology', term:'Deload', full:'Deload Week', def:'Week 4 of this program. Volume reduced ~40% (circuits once, not twice) while load stays the same or slightly increases. Allows supercompensation — the body adapts above baseline during reduced stress.' },
+  { cat:'Training Methodology', term:'Supercompensation', full:'Supercompensation', def:'The physiological phenomenon where the body adapts above its pre-training baseline during a recovery/deload period after accumulated training stress. Zatsiorsky (1995). Why Week 4 deload is non-negotiable.' },
+  { cat:'Training Methodology', term:'Concurrent Training', full:'Concurrent Training', def:'Simultaneous pursuit of strength and endurance adaptations in the same program. Creates an interference effect where endurance stimulus (AMPK) partially suppresses hypertrophic signaling (mTOR). Managed in this program by sequencing strength before cardio.' },
+  { cat:'Training Methodology', term:'CNS', full:'Central Nervous System', def:'The brain and spinal cord. Heavy compound lifting (anchors) creates high CNS demand. Low-CNS days deliberately limit this demand to allow recovery while maintaining movement patterns.' },
+  { cat:'Training Methodology', term:'Undulation', full:'Within-Week CNS Undulation', def:'Varying training intensity within a single week: Accumulation day → Low-CNS day → Rest → Intensification day. Prevents CNS habituation and produces 12–18% greater strength output on intensification days vs flat loading. (Verkhoshansky 1977)' },
+  { cat:'Training Methodology', term:'Progressive Overload', full:'Progressive Overload', def:'Systematically increasing training stimulus over time (load, volume, or both) to drive continued adaptation. Without it, adaptations plateau at 2–3 weeks. (Kraemer & Ratamess 2004)' },
+  { cat:'Training Methodology', term:'Tempo', full:'Lifting Tempo', def:'The speed of each phase of a lift, written as Eccentric-Pause-Concentric. 3-0-3 = 3 seconds lowering, 0 pause, 3 seconds lifting. 4-0-2 = 4 seconds lowering, 0 pause, 2 seconds lifting. Controls TUT.' },
+  { cat:'Training Methodology', term:'Eccentric', full:'Eccentric Contraction', def:'The muscle-lengthening phase of a lift — lowering the bar in a squat, descending in a push-up. The primary driver of hypertrophic stimulus and the phase most responsible for muscle soreness (DOMS).' },
+  { cat:'Training Methodology', term:'Concentric', full:'Concentric Contraction', def:'The muscle-shortening phase of a lift — standing up from a squat, pressing the bar up. Generates force against gravity.' },
+  { cat:'Training Methodology', term:'Isometric', full:'Isometric Contraction', def:'Muscle activation with no joint movement — holding a position under tension (wall sit, split squat hold). Used in this program as a daily tendon primer due to unique pain-inhibiting properties. (Rio et al. 2015)' },
+  { cat:'Training Methodology', term:'MVC', full:'Maximum Voluntary Contraction', def:'The maximum force a muscle can produce voluntarily. Isometric holds in this program are prescribed at ~70% MVC — hard enough to drive tendon adaptation without causing damage.' },
+  { cat:'Training Methodology', term:'RIR', full:'Reps In Reserve', def:'How many more reps you could have done before failure. RPE 7 ≈ 3 RIR. RPE 8 ≈ 2 RIR. Used interchangeably with RPE to calibrate effort.' },
+
+  // ── Physiology ──
+  { cat:'Physiology', term:'mTOR', full:'Mechanistic Target of Rapamycin', def:'The primary anabolic signaling pathway driving muscle protein synthesis and hypertrophy. Activated by mechanical tension (heavy lifting). Suppressed by AMPK activation from endurance exercise — the core of the concurrent training interference effect.' },
+  { cat:'Physiology', term:'AMPK', full:'AMP-Activated Protein Kinase', def:'An enzyme activated by endurance/cardio exercise that signals energy depletion. Partially suppresses mTOR signaling — the mechanism behind the concurrent training interference effect. Minimized by sequencing resistance before endurance.' },
+  { cat:'Physiology', term:'IGF-1', full:'Insulin-Like Growth Factor 1', def:'An anabolic hormone that drives muscle protein synthesis and satellite cell activation. Stimulated by GH (CJC/Ipamorelin), eccentric loading, and collagen synthesis. Partially counters AMPK interference in concurrent training.' },
+  { cat:'Physiology', term:'MPS', full:'Muscle Protein Synthesis', def:'The cellular process of building new muscle protein. Requires both mechanical stimulus (resistance training) and adequate protein substrate (≥2.2g/kg/day distributed in 35–40g doses).' },
+  { cat:'Physiology', term:'DOMS', full:'Delayed Onset Muscle Soreness', def:'Muscle soreness peaking 24–72 hours post-exercise, primarily caused by eccentric contractions causing microtrauma. Not a reliable indicator of training quality — its absence does not mean the session was ineffective.' },
+  { cat:'Physiology', term:'Mechanotransduction', full:'Mechanotransduction', def:'The process by which mechanical forces (load) are converted into cellular biological signals. The mechanism by which tendons and muscles detect and adapt to training stress. Isometric holds and slow eccentrics are particularly effective mechanotransduction stimuli for tendons.' },
+  { cat:'Physiology', term:'Tenocyte', full:'Tenocyte', def:'The primary cell type in tendons. Responsible for producing collagen and maintaining tendon structure. Activated by tensile mechanical load (not compressive load). The target of the isometric primer and HSR protocol in this program.' },
+  { cat:'Physiology', term:'Zone 2', full:'Zone 2 Cardio', def:'Aerobic training at approximately 60–70% of max heart rate — conversational pace. Primarily oxidative metabolism, minimal lactate production. Used in this program for 15-min C2 row finishers to build aerobic base without CNS fatigue.' },
+  { cat:'Physiology', term:'EMG', full:'Electromyography', def:'A measurement of muscle electrical activity used to determine how hard a muscle is working. EMG studies (Contreras 2015) show the barbell hip thrust produces the highest glute activation of any exercise, justifying its inclusion in this program.' },
+  { cat:'Physiology', term:'PCr', full:'Phosphocreatine', def:'An intramuscular energy store rapidly replenished between sets. Creatine supplementation (5g/day) increases PCr stores, allowing greater load on subsequent sets and supporting muscle retention during concurrent training. (Volek 2004)' },
+
+  // ── Injury & Rehab ──
+  { cat:'Injury & Rehab', term:'NRS', full:'Numeric Rating Scale', def:'Pain scale from 0 (none) to 10 (worst imaginable). Used in this program to gate all exercise progression: NRS >4 on waking = reduce load that day. NRS ≤2 for 3+ consecutive mornings = progress load.' },
+  { cat:'Injury & Rehab', term:'Tendinopathy', full:'Tendinopathy', def:'A broad term for tendon pathology, typically involving degeneration of collagen structure rather than acute inflammation. This program addresses quad tendinopathy at the superior patellar pole via isometric loading and HSR protocol.' },
+  { cat:'Injury & Rehab', term:'HSR', full:'Heavy Slow Resistance', def:'A tendon rehabilitation protocol (Kongsgaard 2009) using loads of ~85% 1RM with slow tempos (3-0-3 to 6-0-6). Produces superior tendon remodeling outcomes to eccentric-only protocols. The evidence basis for the anchor sets in this program.' },
+  { cat:'Injury & Rehab', term:'Retrocalcaneal Bursitis', full:'Retrocalcaneal Bursitis', def:'Inflammation of the bursa (fluid-filled sac) between the Achilles tendon and the heel bone. Aggravated by heel-strike impact, toe raises, and calf loading in pain range. All treadmill sprints and jump rope substituted in this program for this reason.' },
+  { cat:'Injury & Rehab', term:'Superior Patellar Pole', full:'Superior Patellar Pole Tendinopathy', def:'Quad tendon pathology at the top of the kneecap rather than the more common inferior pole (jumper\'s knee at the bottom). Responds to 60° knee flexion isometric holds specifically — compressive force at full flexion must be avoided.' },
+  { cat:'Injury & Rehab', term:'Collagen Synthesis', full:'Collagen Synthesis', def:'The production of new collagen protein — the structural material of tendons, ligaments, and cartilage. Dramatically increased (~3.5×) by taking 15g collagen peptides + 50mg Vitamin C 30–45 min before loading. (Shaw et al. 2017)' },
+  { cat:'Injury & Rehab', term:'Cortical Inhibition', full:'Cortical Pain Inhibition', def:'The neurological mechanism by which isometric contractions reduce tendon pain. Sustained isometric holds at 70% MVC produce immediate and lasting pain inhibition via cortical pathways — not just masking, but genuine neural down-regulation of pain signaling. (Rio et al. 2015)' },
+
+  // ── Nutrition & Supplements ──
+  { cat:'Nutrition & Supplements', term:'Your Stack', full:'Full Supplement Stack Overview', def:'Organised into four pillars: Core Daily (health/longevity), Performance (training), Joint/Tissue (injury prevention), and Recovery/Sleep. Each supplement is timed deliberately around training and sleep.' },
+
+  // Core Daily
+  { cat:'Nutrition & Supplements', term:'Fish Oil', full:'Omega-3 Fatty Acids (EPA/DHA)', def:'🧱 CORE DAILY. Anti-inflammatory, supports joint lubrication, cardiovascular health, and reduces DOMS. Particularly relevant given training load and active injury sites. Take with a fat-containing meal. Dose: 2–4g combined EPA/DHA daily.' },
+  { cat:'Nutrition & Supplements', term:'Vitamin D3', full:'Cholecalciferol (Vitamin D3)', def:'🧱 CORE DAILY. Supports testosterone production, bone mineral density, immune function, and muscle force output. Deficiency is extremely common and directly impairs strength adaptation. Take with K2 for calcium co-regulation. Dose: 2,000–5,000 IU daily with fat.' },
+  { cat:'Nutrition & Supplements', term:'Magnesium', full:'Magnesium Glycinate / Bisglycinate', def:'🧱 CORE DAILY + 😴 RECOVERY. Glycinate form preferred — high bioavailability, minimal laxative effect. Supports muscle relaxation, deep sleep (increases slow-wave sleep), reduces nocturnal cramping, and modulates cortisol. Split dose: morning for recovery, evening for sleep. Dose: 300–400mg elemental daily.' },
+  { cat:'Nutrition & Supplements', term:'CoQ10', full:'Coenzyme Q10 / Ubiquinol', def:'🧱 CORE DAILY. Mitochondrial co-factor essential for ATP production in cardiac and skeletal muscle. Ubiquinol (reduced form) has superior absorption. Supports cardiovascular health and reduces oxidative stress from high-volume training. Dose: 100–200mg ubiquinol with a fat-containing meal.' },
+
+  // Performance
+  { cat:'Nutrition & Supplements', term:'Creatine', full:'Creatine Monohydrate', def:'💪 PERFORMANCE. The most evidence-backed sports supplement. 5g/day increases intramuscular phosphocreatine stores → greater ATP resynthesis between sets → more training volume → greater strength and lean mass retention. Specifically counteracts lean mass loss during concurrent training. (Volek et al. 2004). No loading required. Take daily, timing flexible.' },
+  { cat:'Nutrition & Supplements', term:'Electrolytes', full:'Electrolyte Blend (Na / K / Mg)', def:'💪 PERFORMANCE. Critical on hard training days, sauna sessions, and MMA work. Sodium drives fluid retention and nerve conduction; potassium supports muscle contraction; magnesium reduces cramping. Especially important given sauna use — each session can deplete 1–2g sodium. Take intra or immediately post hard session.' },
+  { cat:'Nutrition & Supplements', term:'NO Booster', full:'Nitric Oxide Booster (Pre-Workout)', def:'💪 PERFORMANCE (optional). Typically L-citrulline or beetroot nitrates. Increases vasodilation → greater blood flow to working muscles → better pump, endurance, and nutrient delivery. L-citrulline 6–8g is the evidence-backed form over L-arginine. Take 30–60 min pre-training.' },
+
+  // Joint / Tissue
+  { cat:'Nutrition & Supplements', term:'Collagen Peptides', full:'Hydrolysed Collagen Peptides', def:'🦴 JOINT/TISSUE. Provides glycine, proline, and hydroxyproline — the amino acid substrates for tendon and ligament collagen synthesis. 15g taken 30–45 min before training with Vitamin C produces a 3.5× increase in collagen synthesis versus rest. (Shaw et al. 2017). Non-negotiable given active quad tendinopathy and bursitis.' },
+  { cat:'Nutrition & Supplements', term:'Vitamin C', full:'Ascorbic Acid (Vitamin C)', def:'🦴 JOINT/TISSUE. Essential co-factor for collagen synthesis — acts as an enzyme co-factor for prolyl hydroxylase, required to form stable collagen triple-helix structure. Take 50mg alongside collagen peptides pre-training. Also supports immune function and reduces oxidative stress.' },
+  { cat:'Nutrition & Supplements', term:'Curcumin', full:'Curcumin / Turmeric Extract', def:'🦴 JOINT/TISSUE (optional but recommended). The active compound in turmeric. Inhibits NF-κB inflammatory signaling — reduces systemic inflammation and joint pain. Bioavailability is low unless paired with piperine (black pepper extract, 95% enhancement) or in a phospholipid complex (Meriva). Dose: 500–1000mg curcumin with piperine, with a fat-containing meal.' },
+
+  // Recovery / Sleep
+  { cat:'Nutrition & Supplements', term:'Ashwagandha', full:'Ashwagandha (KSM-66 extract)', def:'😴 RECOVERY/STRESS (optional). An adaptogen that reduces cortisol by ~15–25% in chronically stressed individuals (Chandrasekhar et al. 2012). Supports testosterone levels, reduces anxiety, and may improve sleep quality. KSM-66 is the most clinically validated extract. Dose: 300–600mg daily, taken with food. Most effective when cortisol is chronically elevated.' },
+  { cat:'Nutrition & Supplements', term:'Glycine', full:'Glycine (amino acid)', def:'😴 RECOVERY/SLEEP (optional add). A non-essential amino acid with significant sleep-enhancing effects — 3g before bed reduces core body temperature, shortening time to sleep onset and increasing slow-wave sleep depth. (Bannai et al. 2012). Also a substrate for collagen synthesis. Dose: 3g pre-sleep, can be combined with evening magnesium.' },
+  { cat:'Nutrition & Supplements', term:'EAAs', full:'Essential Amino Acids', def:'💪 PERFORMANCE. The nine amino acids the body cannot synthesize — must come from diet. Leucine (2–3g per dose) is the primary trigger for MPS initiation. A dose of 35–40g high-quality whole protein (meat, whey, casein) contains sufficient EAAs and leucine to maximally stimulate MPS.' },
+
+  // Macro targets
+  { cat:'Macros & Nutrition Targets', term:'Protein', full:'Daily Protein Target', def:'≥2.2g per kg of bodyweight per day. This is the evidence-based minimum to prevent lean mass loss during concurrent training in a caloric deficit. (Helms et al. 2014). Distribute in 35–40g doses every 3–4 hours — do not exceed 4–5 hours between doses during waking hours. Sources: meat, fish, eggs, Greek yogurt, whey/casein.' },
+  { cat:'Macros & Nutrition Targets', term:'Carbohydrates', full:'Carbohydrate Strategy', def:'Carb timing matters more than total carbs for this program. Pre-training (60–90 min before): 30–50g complex carbs to fuel MRT circuits. Post-training: 40–60g fast carbs to replenish muscle glycogen and blunt cortisol spike. Rest days: reduce total carbs by 20–30% vs training days. Prioritise whole food sources: oats, rice, sweet potato, fruit.' },
+  { cat:'Macros & Nutrition Targets', term:'Fats', full:'Dietary Fat Targets', def:'Minimum 0.8–1.0g per kg bodyweight daily. Essential for testosterone and hormone production — fat intake below 20% of total calories causes measurable testosterone suppression. Prioritise: olive oil, avocado, nuts, fatty fish, eggs. Saturated fat moderate (~10% of calories). Avoid seed oils where possible.' },
+  { cat:'Macros & Nutrition Targets', term:'Caloric Deficit', full:'Caloric Deficit for Body Recomposition', def:'For lean muscle retention during fat loss: target a moderate deficit of 300–500 kcal/day — not aggressive cutting. Deficits above 750 kcal/day during concurrent training significantly increase lean mass loss even with adequate protein. Adjust carbs and fats to hit the deficit; never reduce protein below the 2.2g/kg floor.' },
+  { cat:'Macros & Nutrition Targets', term:'Meal Timing', full:'Peri-Workout Nutrition Timing', def:'Pre-session (30–45 min): 15g collagen + 50mg Vit C → tendon synthesis window. Pre-session (60–90 min): 30–50g carbs + 20–30g protein → fuel + MPS priming. Post-session (within 30 min): 35–40g protein + 5g creatine + 40–60g fast carbs → recovery window. Pre-sleep: 30–40g casein → overnight MPS + recovery.' },
+  { cat:'Macros & Nutrition Targets', term:'Hydration', full:'Hydration Targets', def:'Baseline: 35–40ml per kg bodyweight daily. Hard training day: add 500–750ml. Sauna session: add 500–1000ml with electrolytes. MMA session: weigh before and after — replace each 1kg lost with 1.5L fluid + electrolytes. Dehydration of just 2% bodyweight measurably impairs strength output and cognitive performance.' },
+
+  // ── Equipment ──
+  { cat:'Equipment', term:'C2', full:'Concept 2 Rower', def:'Ergometer rowing machine. Replaces all treadmill cardio in this program — zero heel-strike impact, zero patellar compressive force, bilateral pulling pattern that adds concurrent posterior chain stimulus. Rate (spm) = strokes per minute.' },
+  { cat:'Equipment', term:'spm', full:'Strokes Per Minute', def:'Rowing stroke rate. Zone 2 steady-state: 20–22 spm. Moderate aerobic: 24–26 spm. Sprint intervals: 28–32+ spm. Higher spm at same damper = more cardiovascular demand.' },
+  { cat:'Equipment', term:'TRX', full:'Total Resistance eXercise', def:'Suspension training straps anchored overhead. Used for rows (adjustable difficulty by changing body angle), fallouts (anterior core), and single-leg RDL. Low compressive load on joints.' },
+  { cat:'Equipment', term:'RDL', full:'Romanian Deadlift', def:'A hip hinge movement performed with soft knees, lowering the bar along the legs until a hamstring stretch is felt, then driving hips forward to return. The primary posterior chain anchor exercise. Targets hamstrings, glutes, and erectors.' },
+  { cat:'Equipment', term:'OHP', full:'Overhead Press', def:'Barbell pressed from shoulder height to full arm extension overhead. Primary push strength anchor. Targets deltoids, triceps, upper traps. Performed in the power cage with safeties set.' },
+  { cat:'Equipment', term:'CGB', full:'Close-Grip Bench Press', def:'Bench press with hands shoulder-width apart. Emphasizes triceps over pectorals vs wide-grip. Secondary push strength anchor. Performed in power cage.' },
+  { cat:'Equipment', term:'GHD', full:'Glute-Ham Developer', def:'Machine allowing loaded hip extension and knee flexion. Used for hamstring curls and back extensions.' },
+  { cat:'Equipment', term:'Damper', full:'Damper Setting (Rowing)', def:'The air-resistance dial on a Concept 2 rower (1–10). Higher damper = more air = heavier feel per stroke, slower recovery. This program uses damper 4–6 for most work. Damper ≠ difficulty — it changes feel, not just load.' },
+
+  // ── Abbreviations ──
+  { cat:'Abbreviations', term:'MTC', full:'Making the Cut', def:'Jillian Michaels\' 30-day training program — the structural basis of this app, rebuilt with strength anchors, RPE autoregulation, CNS undulation, and isometric tendon priming.' },
+  { cat:'Abbreviations', term:'DB', full:'Dumbbell', def:'Free weight held in one hand. Used throughout circuits for chest press, flys, rows, curls, lunges, and shoulder work.' },
+  { cat:'Abbreviations', term:'BB', full:'Barbell', def:'Long free weight loaded with plates. Used for anchor sets: OHP, RDL, bent-over row, close-grip bench, back squat.' },
+  { cat:'Abbreviations', term:'SUB', full:'Substituted', def:'Exercise replaced entirely — impact cardio (sprints, jump rope) substituted with C2 rower or battle ropes due to injury profile.' },
+  { cat:'Abbreviations', term:'MOD', full:'Modified', def:'Exercise retained but altered — typically reducing range of motion, removing plyometric component, or adding a pain monitoring cue.' },
+  { cat:'Abbreviations', term:'ISO', full:'Isometric', def:'Exercise performed as a static hold with no joint movement. Tendon primer exercises (split squat hold, wall sit, calf raise hold) are all isometric.' },
+  { cat:'Abbreviations', term:'GH', full:'Growth Hormone', def:'Anabolic hormone produced by the pituitary gland. Stimulates IGF-1 production, muscle protein synthesis, and connective tissue repair. Naturally pulses during deep sleep — amplified by heat exposure and heavy resistance training.' },
+  { cat:'Abbreviations', term:'HSP', full:'Heat Shock Proteins', def:'Proteins upregulated by heat stress (infrared sauna). Activate satellite cells and support muscle repair. Reason sauna is recommended before — not immediately after — cold plunge on training days.' },
+  { cat:'Abbreviations', term:'MMA', full:'Mixed Martial Arts', def:'Referenced in this program in the context of electrolyte depletion (MMA sessions drive significant sweat losses) and overall training load management alongside the 30-day cut program.' },
+];
+
+function buildGloss(){
+  const cats = [...new Set(GLOSS.map(g=>g.cat))];
+  const con = document.getElementById('glossContainer');
+  let html = '';
+  cats.forEach(cat => {
+    const terms = GLOSS.filter(g=>g.cat===cat);
+    html += `<div class="gloss-cat" data-cat="${cat}">
+      <div class="ref-card" style="margin-bottom:8px">
+        <div class="ref-card-title">${cat}</div>
+        ${terms.map(t=>`
+        <div class="gloss-item" data-term="${t.term.toLowerCase()} ${t.full.toLowerCase()} ${t.def.toLowerCase()}">
+          <div class="gloss-row">
+            <span class="gloss-term">${t.term}</span>
+            <span class="gloss-full">${t.full}</span>
+          </div>
+          <div class="gloss-def">${t.def}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  con.innerHTML = html;
+}
+
+function filterGloss(q){
+  const query = q.toLowerCase().trim();
+  const items = document.querySelectorAll('.gloss-item');
+  const cats = document.querySelectorAll('.gloss-cat');
+  items.forEach(item => {
+    const match = !query || item.dataset.term.includes(query);
+    item.style.display = match ? '' : 'none';
+  });
+  // Hide category cards that have no visible items
+  cats.forEach(cat => {
+    const visible = [...cat.querySelectorAll('.gloss-item')].some(i=>i.style.display!=='none');
+    cat.style.display = visible ? '' : 'none';
+  });
+}
+
+// ═══════════════════ INIT ═══════════════════
+buildRail();
+buildDays();
+buildGloss();
+goDay(1);
+</script>
+</body>
+</html>
