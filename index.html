@@ -602,7 +602,218 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;display
 }
 .preset.on{background:var(--emerald);color:#000;}
 .preset:active{transform:scale(.91)}
-/* FAB removed — timer lives in nav */
+/* ─── INTAKE FORM ────────────────────────────── */
+.intake-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.intake-overlay.hidden{display:none}
+
+.intake-top{
+  padding:20px 20px 0;
+  flex-shrink:0;
+}
+.intake-logo{
+  font-size:20px;font-weight:800;color:var(--t1);
+  letter-spacing:-.5px;margin-bottom:4px;
+}
+.intake-logo span{color:var(--emerald)}
+/* Step indicator */
+.step-dots{
+  display:flex;gap:6px;margin-top:14px;margin-bottom:0;
+}
+.step-dot{
+  height:3px;border-radius:2px;background:var(--s4);
+  transition:all .3s;flex:1;
+}
+.step-dot.done{background:var(--emerald)}
+.step-dot.active{background:var(--sapphire)}
+
+/* Scrollable screen area */
+.intake-body{
+  flex:1;overflow-y:auto;scrollbar-width:none;
+  padding:0 20px 20px;
+}
+.intake-body::-webkit-scrollbar{display:none}
+
+/* Screen */
+.intake-screen{display:none;padding-top:24px}
+.intake-screen.on{display:block}
+
+.intake-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--emerald);
+  margin-bottom:8px;
+}
+.intake-title{
+  font-size:26px;font-weight:800;color:var(--t1);
+  letter-spacing:-.5px;line-height:1.15;margin-bottom:6px;
+}
+.intake-sub{
+  font-size:13px;color:var(--t2);line-height:1.6;
+  margin-bottom:24px;
+}
+
+/* Text input */
+.intake-field{margin-bottom:16px}
+.intake-label{
+  font-size:11px;font-weight:600;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--t3);
+  margin-bottom:6px;display:block;
+}
+.intake-input{
+  width:100%;padding:13px 14px;
+  background:var(--s2);border:1px solid var(--b2);
+  border-radius:12px;color:var(--t1);
+  font-family:'Inter',sans-serif;font-size:15px;
+  outline:none;-webkit-appearance:none;
+  transition:border-color .15s;
+}
+.intake-input:focus{border-color:var(--sapphire)}
+
+/* Unit toggle */
+.unit-toggle{
+  display:flex;gap:8px;margin-top:6px;
+}
+.unit-btn{
+  flex:1;padding:9px;border-radius:9px;
+  background:var(--s2);border:1px solid var(--b1);
+  color:var(--t3);font-family:'Inter',sans-serif;
+  font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .15s;
+}
+.unit-btn.on{background:rgba(77,158,255,.15);border-color:var(--sapphire);color:var(--sapphire)}
+
+/* Option cards — single select */
+.option-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.option-card{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:12px;cursor:pointer;
+  transition:all .15s;user-select:none;
+  min-height:52px;
+}
+.option-card:active{opacity:.7}
+.option-card.on{
+  background:rgba(31,209,114,.08);
+  border-color:rgba(31,209,114,.35);
+}
+.option-radio{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--s4);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.option-card.on .option-radio{
+  border-color:var(--emerald);background:var(--emerald);
+}
+.option-radio::after{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:#000;opacity:0;transition:opacity .15s;
+}
+.option-card.on .option-radio::after{opacity:1}
+.option-text{flex:1}
+.option-main{font-size:14px;font-weight:500;color:var(--t1)}
+.option-hint{font-size:11px;color:var(--t3);margin-top:2px}
+.option-emoji{font-size:22px;flex-shrink:0}
+
+/* Checkbox grid — multi select */
+.check-section{margin-bottom:20px}
+.check-section-title{
+  font-size:11px;font-weight:700;letter-spacing:.8px;
+  text-transform:uppercase;color:var(--t3);
+  margin-bottom:8px;padding-left:2px;
+}
+.check-grid{display:flex;flex-direction:column;gap:6px}
+.check-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 13px;
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:10px;cursor:pointer;
+  transition:all .15s;user-select:none;
+  min-height:44px;
+}
+.check-item:active{opacity:.7}
+.check-item.on{
+  background:rgba(232,84,122,.07);
+  border-color:rgba(232,84,122,.3);
+}
+.check-box{
+  width:20px;height:20px;border-radius:6px;
+  border:2px solid var(--s4);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:transparent;
+  transition:all .2s;
+}
+.check-item.on .check-box{
+  background:var(--rose);border-color:var(--rose);color:#fff;
+}
+.check-label{font-size:13px;font-weight:400;color:var(--t1)}
+/* Equipment checkbox — green */
+.equip-item.on{
+  background:rgba(31,209,114,.07);
+  border-color:rgba(31,209,114,.3);
+}
+.equip-item.on .check-box{background:var(--emerald);border-color:var(--emerald);color:#000}
+
+/* Summary cards */
+.summary-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.summary-card{
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:12px;padding:13px 14px;
+}
+.summary-card-title{
+  font-size:10px;font-weight:700;letter-spacing:.8px;
+  text-transform:uppercase;color:var(--t3);margin-bottom:8px;
+}
+.summary-row{
+  display:flex;justify-content:space-between;
+  align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--b1);font-size:13px;
+}
+.summary-row:last-child{border-bottom:none}
+.summary-key{color:var(--t2)}
+.summary-val{font-weight:600;color:var(--t1)}
+.sv-g{color:var(--emerald)}
+.sv-r{color:var(--rose)}
+.sv-b{color:var(--sapphire)}
+
+/* Bottom nav of form */
+.intake-footer{
+  flex-shrink:0;
+  padding:12px 20px calc(env(safe-area-inset-bottom) + 12px);
+  background:rgba(13,13,15,.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--b1);
+  display:flex;gap:10px;
+}
+.intake-back{
+  padding:14px 20px;border-radius:13px;
+  background:var(--s2);border:1px solid var(--b2);
+  color:var(--t2);font-family:'Inter',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;
+  min-height:50px;transition:opacity .15s;
+}
+.intake-back:active{opacity:.6}
+.intake-next{
+  flex:1;padding:14px;border-radius:13px;
+  background:var(--emerald);border:none;
+  color:#000;font-family:'Inter',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  min-height:50px;transition:transform .1s, opacity .15s;
+}
+.intake-next:active{transform:scale(.97)}
+.intake-next:disabled{opacity:.4;pointer-events:none}
+/* Reset link */
+.reset-link{
+  text-align:center;font-size:11px;color:var(--t3);
+  padding:8px;cursor:pointer;text-decoration:underline;
+  margin-top:4px;
+}
+
 /* ─── GLOSSARY ───────────────────────────────── */
 .gloss-item{
   padding:10px 14px;
@@ -620,7 +831,269 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;display
 </head>
 <body>
 
-<!-- GRADIENT DEFS (arc fill) -->
+<!-- ══════════════════════════════════════════
+     INTAKE FORM OVERLAY
+     ══════════════════════════════════════════ -->
+<div class="intake-overlay" id="intakeOverlay">
+
+  <!-- Top bar -->
+  <div class="intake-top">
+    <div class="intake-logo">Lima <span>Zulu</span></div>
+    <div class="step-dots">
+      <div class="step-dot active" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
+      <div class="step-dot" id="dot4"></div>
+      <div class="step-dot" id="dot5"></div>
+    </div>
+  </div>
+
+  <!-- Scrollable body -->
+  <div class="intake-body">
+
+    <!-- ── SCREEN 1: About You ── -->
+    <div class="intake-screen on" id="is1">
+      <div class="intake-eyebrow">Step 1 of 5</div>
+      <div class="intake-title">Let's personalise your program</div>
+      <div class="intake-sub">Takes 2 minutes. Your answers stay on your device — nothing is stored anywhere else.</div>
+
+      <div class="intake-field">
+        <label class="intake-label">Your first name</label>
+        <input class="intake-input" id="f-name" type="text" placeholder="e.g. Lamine" autocomplete="given-name">
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">Your bodyweight</label>
+        <input class="intake-input" id="f-weight" type="number" placeholder="e.g. 185" inputmode="decimal">
+        <div class="unit-toggle" style="margin-top:8px">
+          <button class="unit-btn on" id="btn-lbs" onclick="setUnit('lbs')">lbs</button>
+          <button class="unit-btn" id="btn-kg" onclick="setUnit('kg')">kg</button>
+        </div>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">Your main goal</label>
+        <div class="option-grid">
+          <div class="option-card on" onclick="pick(this,'goal')" data-val="fatloss">
+            <div class="option-emoji">🔥</div>
+            <div class="option-text">
+              <div class="option-main">Lose fat</div>
+              <div class="option-hint">Burn fat while keeping the muscle I have</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'goal')" data-val="recomp">
+            <div class="option-emoji">⚖️</div>
+            <div class="option-text">
+              <div class="option-main">Lose fat and build muscle</div>
+              <div class="option-hint">Body recomposition — takes longer but worth it</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'goal')" data-val="strength">
+            <div class="option-emoji">💪</div>
+            <div class="option-text">
+              <div class="option-main">Get stronger</div>
+              <div class="option-hint">Strength first, everything else follows</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 2: Training Background ── -->
+    <div class="intake-screen" id="is2">
+      <div class="intake-eyebrow">Step 2 of 5</div>
+      <div class="intake-title">Your training background</div>
+      <div class="intake-sub">Honest answers get you a better program.</div>
+
+      <div class="intake-field">
+        <label class="intake-label">How long have you been training?</label>
+        <div class="option-grid">
+          <div class="option-card" onclick="pick(this,'level')" data-val="beginner">
+            <div class="option-emoji">🌱</div>
+            <div class="option-text">
+              <div class="option-main">Less than a year</div>
+              <div class="option-hint">Still building the basics</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'level')" data-val="intermediate">
+            <div class="option-emoji">📈</div>
+            <div class="option-text">
+              <div class="option-main">1–4 years</div>
+              <div class="option-hint">Comfortable with most exercises</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'level')" data-val="advanced">
+            <div class="option-emoji">🏆</div>
+            <div class="option-text">
+              <div class="option-main">4+ years</div>
+              <div class="option-hint">Training is a consistent part of my life</div>
+            </div>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">How many days per week can you train?</label>
+        <div class="option-grid">
+          <div class="option-card" onclick="pick(this,'days')" data-val="3">
+            <div class="option-emoji">3️⃣</div>
+            <div class="option-text"><div class="option-main">3 days</div><div class="option-hint">Every other day — great for recovery</div></div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'days')" data-val="4">
+            <div class="option-emoji">4️⃣</div>
+            <div class="option-text"><div class="option-main">4 days</div><div class="option-hint">The sweet spot for most people</div></div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'days')" data-val="5">
+            <div class="option-emoji">5️⃣</div>
+            <div class="option-text"><div class="option-main">5 days</div><div class="option-hint">High commitment, high results</div></div>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">How long is your typical session?</label>
+        <div class="option-grid">
+          <div class="option-card" onclick="pick(this,'duration')" data-val="45">
+            <div class="option-emoji">⏱</div>
+            <div class="option-text"><div class="option-main">45 minutes</div><div class="option-hint">Trimmed circuits, focused work</div></div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'duration')" data-val="60">
+            <div class="option-emoji">🕐</div>
+            <div class="option-text"><div class="option-main">60 minutes</div><div class="option-hint">Standard program as designed</div></div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" onclick="pick(this,'duration')" data-val="90">
+            <div class="option-emoji">🕙</div>
+            <div class="option-text"><div class="option-main">90 minutes</div><div class="option-hint">Full program plus extras</div></div>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 3: Injuries ── -->
+    <div class="intake-screen" id="is3">
+      <div class="intake-eyebrow">Step 3 of 5</div>
+      <div class="intake-title">Any pain or injuries?</div>
+      <div class="intake-sub">Check everything that applies. The program will work around it. No judgement — this is how you train smarter.</div>
+
+      <div class="check-section">
+        <div class="check-section-title">Knees & Legs</div>
+        <div class="check-grid">
+          <div class="check-item" onclick="toggleCheck(this)" data-val="knee_general"><div class="check-box">✓</div><div class="check-label">Knee pain (general)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="knee_tendon"><div class="check-box">✓</div><div class="check-label">Knee tendon pain (pain above or below the kneecap)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="acl"><div class="check-box">✓</div><div class="check-label">Torn ACL or meniscus (history or current)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="hip"><div class="check-box">✓</div><div class="check-label">Hip pain or tightness</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="itband"><div class="check-box">✓</div><div class="check-label">Pain on the outside of your knee or thigh</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="shin"><div class="check-box">✓</div><div class="check-label">Shin pain when running</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="heel"><div class="check-box">✓</div><div class="check-label">Heel pain</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="achilles"><div class="check-box">✓</div><div class="check-label">Achilles pain (back of the ankle)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="plantar"><div class="check-box">✓</div><div class="check-label">Foot arch pain</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="calf"><div class="check-box">✓</div><div class="check-label">Calf strain or tightness</div></div>
+        </div>
+      </div>
+
+      <div class="check-section">
+        <div class="check-section-title">Shoulders & Arms</div>
+        <div class="check-grid">
+          <div class="check-item" onclick="toggleCheck(this)" data-val="shoulder"><div class="check-box">✓</div><div class="check-label">Shoulder pain or clicking</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="elbow"><div class="check-box">✓</div><div class="check-label">Elbow pain (inner or outer)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="wrist"><div class="check-box">✓</div><div class="check-label">Wrist pain</div></div>
+        </div>
+      </div>
+
+      <div class="check-section">
+        <div class="check-section-title">Back</div>
+        <div class="check-grid">
+          <div class="check-item" onclick="toggleCheck(this)" data-val="lowerback"><div class="check-box">✓</div><div class="check-label">Lower back pain</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="disc"><div class="check-box">✓</div><div class="check-label">Slipped or bulging disc (history or current)</div></div>
+          <div class="check-item" onclick="toggleCheck(this)" data-val="upperback"><div class="check-box">✓</div><div class="check-label">Upper back stiffness or pain</div></div>
+        </div>
+      </div>
+
+      <div class="check-item" style="border-radius:10px;background:var(--s2);border:1px solid var(--b1);margin-top:4px" onclick="clearInjuries()">
+        <div class="check-box" id="no-injury-box" style="border-radius:6px">✓</div>
+        <div class="check-label" style="font-weight:600">None — I'm good to go 💪</div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 4: Equipment ── -->
+    <div class="intake-screen" id="is4">
+      <div class="intake-eyebrow">Step 4 of 5</div>
+      <div class="intake-title">What equipment do you have?</div>
+      <div class="intake-sub">Check everything available to you. The program will use what you have and substitute what you don't.</div>
+
+      <div class="check-section">
+        <div class="check-section-title">Cardio</div>
+        <div class="check-grid">
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="treadmill"><div class="check-box">✓</div><div class="check-label">Treadmill</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="bike"><div class="check-box">✓</div><div class="check-label">Stationary bike</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="rower"><div class="check-box">✓</div><div class="check-label">Rowing machine</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="elliptical"><div class="check-box">✓</div><div class="check-label">Elliptical</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="jumprope"><div class="check-box">✓</div><div class="check-label">Jump rope</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="battleropes"><div class="check-box">✓</div><div class="check-label">Battle ropes</div></div>
+        </div>
+      </div>
+
+      <div class="check-section">
+        <div class="check-section-title">Weights</div>
+        <div class="check-grid">
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="rack"><div class="check-box">✓</div><div class="check-label">Squat rack or power cage</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="barbell"><div class="check-box">✓</div><div class="check-label">Barbell and plates</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="adj_dumbbells"><div class="check-box">✓</div><div class="check-label">Adjustable dumbbells</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="dumbbells"><div class="check-box">✓</div><div class="check-label">Regular dumbbells</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="kettlebells"><div class="check-box">✓</div><div class="check-label">Kettlebells</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="bands"><div class="check-box">✓</div><div class="check-label">Resistance bands</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="cable"><div class="check-box">✓</div><div class="check-label">Cable machine</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="legpress"><div class="check-box">✓</div><div class="check-label">Leg press machine</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="latpulldown"><div class="check-box">✓</div><div class="check-label">Lat pulldown machine</div></div>
+        </div>
+      </div>
+
+      <div class="check-section">
+        <div class="check-section-title">Other</div>
+        <div class="check-grid">
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="glutemachine"><div class="check-box">✓</div><div class="check-label">Glute machine</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="pullupbar"><div class="check-box">✓</div><div class="check-label">Pull-up bar</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="trx"><div class="check-box">✓</div><div class="check-label">TRX / suspension straps</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="box"><div class="check-box">✓</div><div class="check-label">Plyo boxes</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="bench"><div class="check-box">✓</div><div class="check-label">Adjustable bench</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="sled"><div class="check-box">✓</div><div class="check-label">Push sled</div></div>
+          <div class="check-item equip-item" onclick="toggleCheck(this)" data-val="fullgym"><div class="check-box">✓</div><div class="check-label">Full commercial gym access</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 5: Summary ── -->
+    <div class="intake-screen" id="is5">
+      <div class="intake-eyebrow">Step 5 of 5</div>
+      <div class="intake-title">Your program is ready</div>
+      <div class="intake-sub" id="summary-greeting">Here's what we've set up for you.</div>
+
+      <div class="summary-grid" id="summaryGrid"></div>
+
+      <div class="reset-link" onclick="resetIntake()">Start over / change answers</div>
+    </div>
+
+  </div><!-- end intake-body -->
+
+  <!-- Footer nav -->
+  <div class="intake-footer">
+    <button class="intake-back" id="intakeBackBtn" onclick="intakeBack()" style="display:none">Back</button>
+    <button class="intake-next" id="intakeNextBtn" onclick="intakeNext()">Get Started →</button>
+  </div>
+
+</div><!-- end intake-overlay -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -1914,11 +2387,236 @@ function filterGloss(q){
   });
 }
 
+// ═══════════════════ INTAKE FORM ═══════════════════
+const INTAKE_SCREENS = 5;
+let intakeStep = 1;
+let intakeUnit = 'lbs';
+
+// Profile object — stored to localStorage
+let profile = {
+  name:'', weight:0, unit:'lbs', weightKg:0,
+  goal:'fatloss', level:'intermediate',
+  days:4, duration:60,
+  injuries:[], equipment:[]
+};
+
+function loadProfile(){
+  const saved = localStorage.getItem('lz_profile');
+  if(saved){
+    try{
+      profile = JSON.parse(saved);
+      // Skip intake if already completed
+      document.getElementById('intakeOverlay').classList.add('hidden');
+      applyProfile();
+      return true;
+    } catch(e){}
+  }
+  return false;
+}
+
+function saveProfile(){
+  localStorage.setItem('lz_profile', JSON.stringify(profile));
+}
+
+function resetIntake(){
+  localStorage.removeItem('lz_profile');
+  location.reload();
+}
+
+// ── Unit toggle ──
+function setUnit(u){
+  intakeUnit = u;
+  profile.unit = u;
+  document.getElementById('btn-lbs').classList.toggle('on', u==='lbs');
+  document.getElementById('btn-kg').classList.toggle('on', u==='kg');
+}
+
+// ── Single-select option cards ──
+function pick(el, group){
+  el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  profile[group] = el.dataset.val;
+}
+
+// ── Multi-select checkboxes ──
+function toggleCheck(el){
+  el.classList.toggle('on');
+  // clear the "none" box if active
+  const noBox = document.getElementById('no-injury-box');
+  if(noBox) noBox.closest('.check-item')?.classList.remove('on');
+}
+function clearInjuries(){
+  document.querySelectorAll('#is3 .check-item').forEach(i=>i.classList.remove('on'));
+  const noEl = document.getElementById('no-injury-box').closest('.check-item');
+  noEl.classList.add('on');
+  document.getElementById('no-injury-box').style.background='var(--emerald)';
+  document.getElementById('no-injury-box').style.borderColor='var(--emerald)';
+  document.getElementById('no-injury-box').style.color='#000';
+}
+
+// ── Collect checked values from a screen ──
+function collectChecked(screenId){
+  return [...document.querySelectorAll(`#${screenId} .check-item.on`)]
+    .map(i=>i.dataset.val).filter(Boolean);
+}
+
+// ── Step navigation ──
+function intakeNext(){
+  // Validate & collect current screen
+  if(intakeStep===1){
+    const name = document.getElementById('f-name').value.trim();
+    const weight = parseFloat(document.getElementById('f-weight').value);
+    if(!name){ flashInput('f-name'); return; }
+    if(!weight || weight < 30){ flashInput('f-weight'); return; }
+    profile.name = name;
+    profile.weight = weight;
+    profile.unit = intakeUnit;
+    profile.weightKg = intakeUnit==='lbs' ? weight/2.205 : weight;
+  }
+  if(intakeStep===2){
+    if(!profile.level){ return; }
+    if(!profile.days){ return; }
+    if(!profile.duration){ return; }
+  }
+  if(intakeStep===3){
+    profile.injuries = collectChecked('is3');
+  }
+  if(intakeStep===4){
+    profile.equipment = collectChecked('is4');
+    buildSummary();
+  }
+  if(intakeStep===5){
+    saveProfile();
+    document.getElementById('intakeOverlay').classList.add('hidden');
+    applyProfile();
+    return;
+  }
+  goIntakeStep(intakeStep + 1);
+}
+
+function intakeBack(){
+  if(intakeStep > 1) goIntakeStep(intakeStep - 1);
+}
+
+function goIntakeStep(n){
+  document.getElementById(`is${intakeStep}`).classList.remove('on');
+  document.getElementById(`is${n}`).classList.add('on');
+  intakeStep = n;
+  updateIntakeDots();
+  updateIntakeFooter();
+  document.querySelector('.intake-body').scrollTop = 0;
+}
+
+function updateIntakeDots(){
+  for(let i=1;i<=INTAKE_SCREENS;i++){
+    const dot = document.getElementById(`dot${i}`);
+    dot.className = 'step-dot' + (i<intakeStep?' done':i===intakeStep?' active':'');
+  }
+}
+
+function updateIntakeFooter(){
+  document.getElementById('intakeBackBtn').style.display = intakeStep>1?'block':'none';
+  const nextBtn = document.getElementById('intakeNextBtn');
+  nextBtn.textContent = intakeStep===5 ? "Let's Train 🔥" : intakeStep===4 ? 'Review →' : 'Next →';
+}
+
+function flashInput(id){
+  const el = document.getElementById(id);
+  el.style.borderColor='var(--rose)';
+  el.focus();
+  setTimeout(()=>el.style.borderColor='',1500);
+}
+
+// ── Build summary screen ──
+function buildSummary(){
+  const p = profile;
+  const kg = p.weightKg;
+  const protein = Math.round(kg * 2.2);
+  const hydration = Math.round(kg * 37.5);
+  const goalLabels = {fatloss:'Lose fat 🔥',recomp:'Recomposition ⚖️',strength:'Get stronger 💪'};
+  const levelLabels = {beginner:'Beginner 🌱',intermediate:'Intermediate 📈',advanced:'Advanced 🏆'};
+  const injuryCount = p.injuries.filter(i=>i!=='none').length;
+  const equipCount = p.equipment.length;
+
+  document.getElementById('summary-greeting').textContent =
+    `Here's what we've set up for you, ${p.name}.`;
+
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = `
+    <div class="summary-card">
+      <div class="summary-card-title">Your Profile</div>
+      <div class="summary-row"><span class="summary-key">Name</span><span class="summary-val">${p.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Bodyweight</span><span class="summary-val">${p.weight} ${p.unit} (${Math.round(kg)}kg)</span></div>
+      <div class="summary-row"><span class="summary-key">Goal</span><span class="summary-val sv-g">${goalLabels[p.goal]||p.goal}</span></div>
+      <div class="summary-row"><span class="summary-key">Experience</span><span class="summary-val">${levelLabels[p.level]||p.level}</span></div>
+      <div class="summary-row"><span class="summary-key">Training days</span><span class="summary-val">${p.days} days / week</span></div>
+      <div class="summary-row"><span class="summary-key">Session length</span><span class="summary-val">${p.duration} minutes</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-card-title">Your Daily Nutrition Targets</div>
+      <div class="summary-row"><span class="summary-key">Protein</span><span class="summary-val sv-g">≥${protein}g / day</span></div>
+      <div class="summary-row"><span class="summary-key">Water</span><span class="summary-val sv-b">≥${hydration}ml / day</span></div>
+      <div class="summary-row"><span class="summary-key">Caloric deficit</span><span class="summary-val">300–500 kcal max</span></div>
+      <div class="summary-row"><span class="summary-key">Protein doses</span><span class="summary-val">35–40g every 3–4 hours</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-card-title">Program Adjustments</div>
+      <div class="summary-row">
+        <span class="summary-key">Injury modifications</span>
+        <span class="summary-val ${injuryCount>0?'sv-r':''}">${injuryCount>0?injuryCount+' active flag'+(injuryCount>1?'s':''):'None — full program'}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-key">Equipment matched</span>
+        <span class="summary-val sv-g">${equipCount} item${equipCount!==1?'s':''} detected</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-key">Cardio substitute</span>
+        <span class="summary-val">${getCardioSub()}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-key">Anchor sets</span>
+        <span class="summary-val">${p.equipment.includes('rack')&&p.equipment.includes('barbell')?'Barbell (power cage)':'Dumbbell equivalent'}</span>
+      </div>
+    </div>
+  `;
+}
+
+function getCardioSub(){
+  const e = profile.equipment;
+  if(e.includes('rower')) return 'Concept 2 / Rower';
+  if(e.includes('bike')) return 'Stationary bike';
+  if(e.includes('treadmill')) return 'Treadmill (if no lower body injury)';
+  if(e.includes('battleropes')) return 'Battle ropes';
+  if(e.includes('elliptical')) return 'Elliptical';
+  return 'Bodyweight intervals';
+}
+
+// ── Apply profile to app header ──
+function applyProfile(){
+  const p = profile;
+  if(!p.name) return;
+  // Update header greeting
+  document.querySelector('.hdr-title').textContent = `${p.name}'s Cut`;
+  // Update protein target in loads tab
+  const kg = p.weightKg;
+  const protein = Math.round(kg*2.2);
+  const hydration = Math.round(kg*37.5);
+  // Inject personalised targets into a small chip under the header
+  const sub = document.querySelector('.hdr-sub');
+  if(sub) sub.textContent = `Protein: ≥${protein}g · Water: ≥${hydration}ml · ${p.days} days/wk`;
+}
+
 // ═══════════════════ INIT ═══════════════════
 buildRail();
 buildDays();
 buildGloss();
 goDay(1);
+// Check for existing profile — if none, show intake
+if(!loadProfile()){
+  // Fresh user — intake already visible
+  updateIntakeDots();
+  updateIntakeFooter();
+}
 </script>
 </body>
 </html>
