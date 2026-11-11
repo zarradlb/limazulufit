@@ -99,8 +99,14 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px c
 .joint{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:11px;color:var(--t3);font-weight:600}
-input[type=number],select{width:100%;background:var(--s3);border:1px solid var(--b2);border-radius:var(--r-sm);padding:10px 12px;outline:none;min-height:44px}
-input[type=number]:focus,select:focus{border-color:var(--sapphire)}
+input[type=number],input[type=text],input[type=url],select{width:100%;background:var(--s3);border:1px solid var(--b2);border-radius:var(--r-sm);padding:10px 12px;outline:none;min-height:44px}
+input[type=number]:focus,input[type=text]:focus,input[type=url]:focus,select:focus{border-color:var(--sapphire)}
+input[type=text],input[type=url]{font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.sync-dot{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--t2)}
+.sync-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--t3)}
+.sync-dot.ok::before{background:var(--emerald)}
+.sync-dot.warn::before{background:#F5A623}
+.sync-line{text-align:center;margin-top:8px}
 input[type=search]{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:var(--r-md);padding:11px 14px;outline:none;margin-bottom:12px;min-height:44px}
 .btn{width:100%;min-height:48px;border:none;border-radius:var(--r-md);background:var(--emerald);color:var(--bg);font-weight:700;cursor:pointer;margin-top:4px}
 .btn.ghost{background:var(--s3);color:var(--t1);border:1px solid var(--b2)}
@@ -206,6 +212,23 @@ ol.rules li b{color:var(--t1)}
       <p class="muted" style="margin-top:8px" id="ebStatus"></p>
     </div>
 
+    <div class="panel" id="syncPanel">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <h3 style="margin:0">Google Sheet backup</h3>
+        <span class="sync-dot" id="syncDot">Off</span>
+      </div>
+      <p class="muted" id="syncStatus"></p>
+      <div class="field" style="margin-top:10px"><label for="s-url">Web app link</label><input type="url" id="s-url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <div class="field" style="margin-top:8px"><label for="s-key">Key</label><input type="text" id="s-key" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <p class="muted" style="margin-top:6px">This device made the key. On a second device, paste the key from the first one.</p>
+      <div class="row" style="margin-top:10px;flex-wrap:wrap">
+        <button class="btn sm" id="s-connect">Connect</button>
+        <button class="btn ghost sm" id="s-now">Back up now</button>
+        <button class="btn ghost sm" id="s-restore">Restore from Sheet</button>
+      </div>
+      <div id="s-offer"></div>
+    </div>
+
     <div class="sec"><h2>Main lifts by week</h2></div>
     <div class="panel scroll-x"><table class="ml" id="mlTable"></table></div>
   </section>
@@ -255,9 +278,141 @@ const DATA = {"weeks": {"1": {"intro": "Weeks 1 and 2 run the on-ramp (rule 7): 
 const DESC = Object.assign({}, ...Object.values(DATA.desc));
 const DOW = {Sat:'Sat',Mon:'Mon',Wed:'Wed',Thu:'Thu'};
 const KEY = 'lz12_v1';
-let S = {unit:'lb', e1rm:{box:0,fp:0,sumo:0}, earnback:false, done:{}, ex:{}, joint:{}, w:1, d:1, view:'train'};
+const DEF = () => ({unit:'lb', e1rm:{box:0,fp:0,sumo:0}, earnback:false, done:{}, ex:{}, joint:{}, doneAt:{}, mainAt:{}, w:1, d:1, view:'train'});
+let S = DEF();
 try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} queueSync(); }
+
+// Google Sheet backup. Link and key live in their own key so a restore never overwrites them.
+const SKEY = 'lz12_sync';
+let Y = {url:'', key:'', last:'', lastFp:'', err:'', hold:false};
+try { Object.assign(Y, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch(e) {}
+if (!Y.key) Y.key = genKey();
+function saveY(){ try { localStorage.setItem(SKEY, JSON.stringify(Y)); } catch(e) {} }
+function genKey(){
+  const a = new Uint8Array(18); crypto.getRandomValues(a);
+  return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_');
+}
+const DATA_FIELDS = ['unit','e1rm','earnback','done','ex','joint','doneAt','mainAt'];
+function dataState(){ const o = {}; DATA_FIELDS.forEach(f => o[f] = S[f]); return o; }
+function fingerprint(){ return JSON.stringify(dataState()); }
+function entries(st){
+  if (!st) return 0;
+  const t = o => Object.values(o || {}).filter(v => v && (typeof v !== 'object' || Object.values(v).some(x => x !== '' && x !== undefined))).length;
+  return t(st.done) + t(st.ex) + t(st.joint) + Object.values(st.e1rm || {}).filter(Number).length;
+}
+const syncReady = () => !!(Y.url && Y.key && !Y.hold);
+const pending = () => syncReady() && fingerprint() !== Y.lastFp;
+let syncT = null, syncing = false;
+function queueSync(ms){
+  if (!pending()) return renderSync();
+  clearTimeout(syncT); syncT = setTimeout(syncNow, ms ?? 4000); renderSync();
+}
+function mainItems(w, d){ return itemsFor(w, DATA.weeks[w].days.find(x => x.n === d)).filter(it => it.lift); }
+function sessionRows(){
+  const rows = [];
+  for (let w = 1; w <= 12; w++) DATA.weeks[w].days.forEach(day => {
+    const k = w + '-' + day.n, items = itemsFor(w, day), j = S.joint[k] || {};
+    const checked = items.filter(it => S.ex[k + '-' + it.id]).length;
+    const m = S.mainAt[k] || {names: mainItems(w, day.n).map(it => it.name + ' · ' + it.rx).join(' | '), loads: ''};
+    const num = v => v === '' || v === undefined ? '' : Number(v);
+    rows.push([w, DOW[day.dow] + ' · Day ' + day.n, day.name, S.done[k] ? 'Yes' : '', S.done[k] ? (S.doneAt[k] || '') : '',
+      checked + ' of ' + items.length, m.names, m.loads, num(j.during), num(j.morning)]);
+  });
+  return rows;
+}
+async function call(method, body){
+  const url = Y.url + (method === 'GET' ? (Y.url.includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(Y.key) : '');
+  const r = await fetch(url, method === 'GET' ? {redirect:'follow'} : {method:'POST', body: JSON.stringify(body), redirect:'follow'});
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error || 'refused');
+  return j;
+}
+function errText(e){
+  if (e.message === 'bad key') return 'The key doesn\'t match this Sheet. Paste the key from your first device.';
+  if (!navigator.onLine) return 'Offline. It backs up when you\'re back online.';
+  return 'Couldn\'t reach the Sheet. Check the web app link; it retries on its own.';
+}
+async function syncNow(){
+  clearTimeout(syncT);
+  if (!syncReady() || syncing) return;
+  syncing = true; renderSync('Backing up...');
+  const fp = fingerprint();
+  try {
+    await call('POST', {k: Y.key, state: dataState(), sessions: sessionRows(), e1rm: S.e1rm, unit: S.unit});
+    Y.last = new Date().toISOString(); Y.lastFp = fp; Y.err = '';
+  } catch(e) { Y.err = errText(e); }
+  syncing = false; saveY(); renderSync();
+  if (!Y.err && pending()) queueSync(1000);
+}
+function connect(){
+  const url = $('#s-url').value.trim(), key = $('#s-key').value.trim();
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)) { Y.err = 'The link should start with https://script.google.com and end in /exec.'; return renderSync(); }
+  if (key.length < 16) { Y.err = 'The key needs at least 16 characters.'; return renderSync(); }
+  Y.url = url; Y.key = key; Y.hold = true; Y.lastFp = ''; Y.err = ''; saveY();
+  return check();
+}
+// Before the first backup from a device, look at what the Sheet already holds so an
+// empty phone can't overwrite a full log.
+async function check(){
+  renderSync('Connecting...');
+  try {
+    const j = await call('GET');
+    if (j.state && entries(j.state) > entries(dataState())) return offer(j);
+    Y.hold = false; Y.err = ''; saveY(); syncNow();
+  } catch(e) { Y.err = errText(e); saveY(); renderSync(); }
+}
+let offered = null;
+function offer(j){
+  offered = j; Y.hold = true; saveY();
+  const when = j.savedAt ? ago(j.savedAt) : 'earlier';
+  $('#s-offer').innerHTML = `<div class="banner ice" style="margin:10px 0 0"><b>The Sheet's backup from ${esc(when)} has ${entries(j.state)} entries. This device has ${entries(dataState())}.</b> Pick which one to keep. Backups pause until you do.
+    <div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sm" id="s-take">Restore the Sheet's data here</button><button class="btn ghost sm" id="s-keep">Keep this device's data</button></div></div>`;
+  renderSync();
+}
+function clearOffer(){ offered = null; const o = $('#s-offer'); if (o) o.innerHTML = ''; }
+function applyRestore(st){
+  const keep = {w:S.w, d:S.d, view:S.view};
+  S = Object.assign(DEF(), st, keep);
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
+  Y.lastFp = fingerprint(); Y.hold = false; Y.err = ''; Y.last = new Date().toISOString(); saveY();
+  clearOffer(); renderLifts();
+}
+function keepMine(){ clearOffer(); Y.hold = false; Y.lastFp = ''; Y.err = ''; saveY(); syncNow(); }
+async function restore(){
+  if (!Y.url) { Y.err = 'Connect a Sheet first.'; return renderSync(); }
+  renderSync('Checking the Sheet...');
+  try {
+    const j = await call('GET');
+    if (!j.state) { Y.err = 'The Sheet has no backup yet.'; return renderSync(); }
+    offer(j);
+  } catch(e) { Y.err = errText(e); renderSync(); }
+}
+function ago(iso){
+  if (!iso) return '';
+  const d = new Date(iso), now = new Date();
+  const t = d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  return d.toDateString() === now.toDateString() ? 'today at ' + t : d.toLocaleDateString([], {month:'short', day:'numeric'}) + ' at ' + t;
+}
+function renderSync(msg){
+  let text, cls = '', dot = 'Off', line;
+  if (!Y.url) { text = Y.err || 'Off. Once connected, every session, e1RM change and joint score goes to a Google Sheet you own.'; cls = Y.err ? 'warn' : ''; line = 'Not backed up. Connect a Google Sheet in the Lifts tab.'; }
+  else if (offered) { text = 'Paused until you pick below.'; cls = 'warn'; dot = 'Paused'; line = 'Backups paused. Pick a backup in the Lifts tab.'; }
+  else if (msg) { text = msg; cls = 'warn'; dot = 'Working'; line = msg; }
+  else if (Y.err) { text = Y.err; cls = 'warn'; dot = 'Not backed up'; line = 'Not backed up. ' + Y.err; }
+  else if (pending()) { text = 'Changes waiting to back up.'; cls = 'warn'; dot = 'Waiting'; line = 'Backing up shortly.'; }
+  else { text = Y.last ? 'Backed up ' + ago(Y.last) + '.' : 'Connected.'; cls = 'ok'; dot = 'Backed up'; line = text; }
+  const sd = $('#syncDot'); if (sd) { sd.className = 'sync-dot ' + cls; sd.textContent = dot; }
+  const st = $('#syncStatus'); if (st) st.textContent = text;
+  const ln = $('#syncLine'); if (ln) ln.textContent = line;
+}
+window.addEventListener('online', () => { if (Y.err) { Y.err = ''; syncNow(); } });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && pending() && navigator.sendBeacon) {
+    navigator.sendBeacon(Y.url, JSON.stringify({k: Y.key, state: dataState(), sessions: sessionRows(), e1rm: S.e1rm, unit: S.unit}));
+  }
+  if (document.visibilityState === 'visible' && pending()) syncNow();
+});
 const $ = (s, r=document) => r.querySelector(s);
 const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -352,9 +507,10 @@ function renderSession(){
     <div class="field"><label for="j-morning">Next morning</label><input type="number" inputmode="numeric" min="0" max="10" id="j-morning" value="${j.morning ?? ''}"></div></div>
     <div id="jWarn"></div></div>`;
   h += `<button class="btn ${sessionDone(S.w,S.d)?'ghost':''}" id="doneBtn">${sessionDone(S.w,S.d) ? 'Session done · tap to undo' : 'Mark session done'}</button>`;
+  h += `<p class="muted sync-line" id="syncLine"></p>`;
   if (wk.intro) h += `<p class="muted" style="margin-top:12px">${esc(wk.intro)}</p>`;
   $('#session').innerHTML = h;
-  jointWarn();
+  jointWarn(); renderSync();
   $('#hdrSub').textContent = `Week ${S.w} · ${DOW[day.dow]} · ${day.name}`;
 }
 function jointWarn(){
@@ -383,6 +539,9 @@ function renderLifts(){
   if (logged === n && hi <= 1) st += ' You qualify.';
   else if (hi > 1) st += ' A score above 1 means earn-back stays off this block.';
   $('#ebStatus').textContent = st;
+  if (document.activeElement !== $('#s-url')) $('#s-url').value = Y.url;
+  if (document.activeElement !== $('#s-key')) $('#s-key').value = Y.key;
+  renderSync();
   calc();
   renderML();
 }
@@ -434,7 +593,20 @@ document.addEventListener('click', e => {
   const ex = t.closest('.ex');
   if (ex && t.closest('.check')) { const k = S.w+'-'+S.d+'-'+ex.dataset.id; S.ex[k] = !S.ex[k]; save(); return ex.classList.toggle('done', !!S.ex[k]); }
   if (ex && t.closest('.ex-name')) return ex.classList.toggle('show');
-  if (t.id === 'doneBtn') { const k = S.w+'-'+S.d; S.done[k] = !S.done[k]; save(); return renderTrain(); }
+  if (t.id === 'doneBtn') {
+    const k = S.w+'-'+S.d; S.done[k] = !S.done[k];
+    if (S.done[k]) {
+      const m = mainItems(S.w, S.d);
+      S.doneAt[k] = new Date().toISOString();
+      S.mainAt[k] = {names: m.map(it => it.name + ' · ' + it.rx).join(' | '), loads: m.map(it => loadFor(it) || '-').join(' | ')};
+    } else { delete S.doneAt[k]; delete S.mainAt[k]; }
+    save(); renderTrain(); return syncNow();
+  }
+  if (t.id === 's-connect') return connect();
+  if (t.id === 's-now') { if (!Y.url) return connect(); Y.lastFp = ''; Y.err = ''; return syncNow(); }
+  if (t.id === 's-restore') return restore();
+  if (t.id === 's-take' && offered) return applyRestore(offered.state);
+  if (t.id === 's-keep') return keepMine();
   const u = t.closest('#unitSeg button'); if (u) { S.unit = u.dataset.u; save(); return renderLifts(); }
   if (t.id === 'ebToggle') { S.earnback = !S.earnback; save(); return renderLifts(); }
   const sv = t.closest('[data-save]'); if (sv) { const v = Number($('#c-out').dataset.v) || 0; if (v) { S.e1rm[sv.dataset.save] = v; save(); renderLifts(); } return; }
@@ -452,6 +624,9 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => { if (e.target.id === 'c-rpe') calc(); });
 
 setView(S.view || 'train');
+saveY();
+if (Y.url && Y.hold) check();
+else if (pending()) queueSync(1500);
 </script>
 </body>
 </html>
